@@ -5,30 +5,116 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auto-Resizing Canvases</title>
     <style>
+
         body {
-            display: flex;
+            background-color: #1f1f1f;
+        }
+
+        h1 {
+            color: red;
+            text-align: center;
+        }
+
+        h2 {
+            color: white;
+            text-align: center;
+        }
+
+        .canvas-container {
+            display: grid;
+            grid-template-columns: auto auto;
             margin: 0;
-            height: 100vh;
+            /* height: 100vh; */
+            /* overflow: hidden; */
         }
         canvas {
             flex: 1;
             border: 1px solid black;
-            width: 100%;
-            height: 100%;
+            margin: 20px
+            /* width: 100%;
+            height: 95%; */
         }
     </style>
 </head>
 <body>
-    <canvas id="canvas1"></canvas>
-    <canvas id="canvas2"></canvas>
+    <header>
+        <h1>Tetris Dual</h1>
+    </header>
+
+    <main>
+        <div class="canvas-container" id="canvas-container">
+            <div id="col1">
+                <h2>You</h2>
+                <canvas id="p1Canvas"></canvas>
+            </div>
+            <div id="col2">
+                <h2>Opponent</h2>
+                <canvas id="p2Canvas"></canvas>
+            </div>
+        </div>   
+    </main>
+
     <script>
         function resizeCanvas() {
+            console.log('Resizing canvases');
+
+            
+
+            canvasMargin = 20; // From the css for the canvas
+            canvasWidth = (window.innerWidth - canvasMargin * 5) / 2;
+            canvasHeight = window.innerHeight;
+
+
             const canvases = document.querySelectorAll('canvas');
             canvases.forEach(canvas => {
-                const rect = canvas.getBoundingClientRect();
-                canvas.width = rect.width;
-                canvas.height = rect.height;
+                // Get the bounding rectangle of the canvas
+                var rect = canvas.getBoundingClientRect();
+
+                // Calculate the position relative to the top of the page
+                var canvasTop = rect.top + window.scrollY;
+                var canvasLeft = rect.left + window.scrollX;
+
+                scaledCanvasWidth = scaleDimensions(canvasWidth, maxHeight)
+                scaledCanvasHeight = 
+
+                console.log(`Canvas dimensions: ${canvasWidth}x${canvasHeight}`);
+                canvas.width = canvasWidth;
+                canvas.height = (window.innerHeight - canvasTop) - (canvasMargin * 2);
+                draw(canvas);
             });
+        }
+
+        function scaleDimensions(maxWidth, maxHeight) {
+            const aspectRatio = 24 / 10;
+            let width = maxWidth;
+            let height = maxWidth / aspectRatio;
+
+            if (height > maxHeight) {
+                height = maxHeight;
+                width = maxHeight * aspectRatio;
+            }
+
+            return { width, height };
+        }
+
+// Example usage:
+const maxWidth = 800; // Your given width
+const maxHeight = 600; // Your given height
+const aspectWidth = 24;
+const aspectHeight = 10;
+
+const scaledDimensions = scaleDimensions(maxWidth, maxHeight, aspectWidth, aspectHeight);
+console.log(`Scaled dimensions:
+
+        function draw(canvas) {
+            const context = canvas.getContext('2d');
+
+            // Clear the canvas
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw a rectangle (example)
+            context.fillStyle = 'blue';
+            context.fillRect(50, 50, canvas.width - 100, canvas.height - 100);
         }
 
         window.addEventListener('resize', resizeCanvas);
