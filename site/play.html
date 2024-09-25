@@ -21,6 +21,14 @@
             display: block;
             background-color: white;
         }
+
+        .canvas-container {
+            display: grid;
+            grid-template-columns: auto auto;
+            gap: 10px;
+            border: 5px solid #0f0;
+            align-items: center;
+        }
     </style>
 </head>
 
@@ -31,9 +39,10 @@
     </header>
 
     <main;">
-        <canvas id="p1Canvas"></canvas>
-        <br>
-        <canvas id="p2Canvas"></canvas>
+        <div class="canvas-container" id="canvas-container">
+            <canvas id="p1Canvas"></canvas>
+            <canvas id="p2Canvas"></canvas>
+        </div>   
     </main>
     <script>
         // JavaScript to draw on the canvas
@@ -41,7 +50,11 @@
         const canvases = [document.getElementById('p1Canvas'), document.getElementById('p2Canvas')];
         // const context = p1Canvas.getContext('2d');
 
-        function resizeCanvas() {
+        function resizeCanvas(canvases) {
+            const canvasContainer = document.getElementById('canvas-container');
+            const cellWidth = canvasContainer.getBoundingClientRect().width / 2;
+            // console.log('Grid Width:', gridWidth);
+
             
             // Get the bounding rectangle of the canvas
             var rect = canvases[0].getBoundingClientRect();
@@ -54,8 +67,12 @@
             console.log('Top: ' + canvasTop + 'px');
             console.log('Left: ' + canvasLeft + 'px');
 
-            canvases[0].width = window.innerWidth / 2.1;
+            canvases[0].width = cellWidth;
             canvases[0].height = window.innerHeight - canvasTop;
+
+            canvases[1].width = cellWidth;
+            canvases[1].height = window.innerHeight - canvasTop;
+            // canvases[0].height = 700;
 
 
             draw(canvases[0]);
@@ -73,10 +90,10 @@
         }
 
         // Resize the canvas when the window is resized
-        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('resize', resizeCanvas(canvases));
 
         // Initial resize to set the canvas size
-        resizeCanvas();
+        resizeCanvas(canvases);
 
     </script>
 
