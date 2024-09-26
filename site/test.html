@@ -29,7 +29,7 @@
         }
         canvas {
             flex: 1;
-            border: 1px solid black;
+            border: 5px solid white;
             margin: 20px
             /* width: 100%;
             height: 95%; */
@@ -74,18 +74,22 @@
                 var canvasTop = rect.top + window.scrollY;
                 var canvasLeft = rect.left + window.scrollX;
 
-                scaledCanvasWidth = scaleDimensions(canvasWidth, maxHeight)
-                scaledCanvasHeight = // Finish this, use values from below
+                canvasMaxWidth = canvasWidth;
+                // canvasMaxHeight = (window.innerHeight - canvasTop) - (canvasMargin * 2);
+                canvasMaxHeight = (window.innerHeight);
+
+                scaledCanvasWidth = scaleDimensions(canvasWidth, maxHeight)[0]
+                scaledCanvasHeight = scaleDimensions(canvasWidth, maxHeight)[1]
 
                 console.log(`Canvas dimensions: ${canvasWidth}x${canvasHeight}`);
-                canvas.width = canvasWidth;
-                canvas.height = (window.innerHeight - canvasTop) - (canvasMargin * 2);
+                canvas.width = scaledCanvasWidth;
+                canvas.height = scaledCanvasHeight;
                 draw(canvas);
             });
         }
 
         function scaleDimensions(maxWidth, maxHeight) {
-            const aspectRatio = 24 / 10;
+            const aspectRatio = 10 / 24;
             let width = maxWidth;
             let height = maxWidth / aspectRatio;
 
@@ -94,17 +98,17 @@
                 width = maxHeight * aspectRatio;
             }
 
-            return { width, height };
+            return [width, height];
         }
 
-// Example usage:
-const maxWidth = 800; // Your given width
-const maxHeight = 600; // Your given height
-const aspectWidth = 24;
-const aspectHeight = 10;
+        // Example usage:
+        const maxWidth = 800; // Your given width
+        const maxHeight = 600; // Your given height
+        const aspectWidth = 24;
+        const aspectHeight = 10;
 
-const scaledDimensions = scaleDimensions(maxWidth, maxHeight, aspectWidth, aspectHeight);
-console.log(`Scaled dimensions:
+        const scaledDimensions = scaleDimensions(maxWidth, maxHeight, aspectWidth, aspectHeight);
+        console.log("Scaled dimensions: " + scaleDimensions[0] + "x" + scaleDimensions[1]);
 
         function draw(canvas) {
             const context = canvas.getContext('2d');
