@@ -6,96 +6,98 @@
     <title>Tetris Dual</title>
     <link rel="icon" href="../favicon.png" type="image/png">
     <style>
-        body, html {
+        html, body {
+            display: flex;
+            flex-direction: column;
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
+            background-color: #1f1f1f;
         }
-        h1 {
-            margin: 3%;
-            color: red;
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+        }
+
+
+        .header h1 {
+            margin: 0;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .github-link {
+            margin-left: auto;
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: #444;
+            border-radius: 5px;
+        }
+
+        main {
+            display: flex;
+            flex-direction: row;
+            flex-grow: 1;
+            border: 5px solid yellow;
+            flex-grow: 1;
+            align-items: stretch;
+            justify-content: space-between;
+        }
+
+        
+
+        .column {
+            border: 10px solid green;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .column h2 {
+            color: white;
             text-align: center;
+            align-items: center;
+            height: 20px;
         }
+
+
         canvas {
             display: block;
             background-color: white;
+            border: 5px solid blue;
+            margin:auto
         }
-
-        .canvas-container {
-            display: grid;
-            grid-template-columns: auto auto;
-            gap: 10px;
-            border: 5px solid #0f0;
-            align-items: center;
-        }
+         
     </style>
 </head>
 
 
-<body style="background-color: #1f1f1f;">
-    <header>
+<body >
+    <header class="header">
         <h1>Tetris Dual</h1>
+        <a href="https://github.com/tychart/startup" class="github-link">GitHub</a>
     </header>
 
-    <main;">
-        <div class="canvas-container" id="canvas-container">
+    <main>        
+        <div class="column" id="column1">
+            <h2>You</h2>
             <canvas id="p1Canvas"></canvas>
+        </div>
+
+        <div class="column" id="column2">
+            <h2>Opponent</h2>
             <canvas id="p2Canvas"></canvas>
-        </div>   
+        </div>            
     </main>
-    <script>
-        // JavaScript to draw on the canvas
-        // const p1Canvas = document.getElementById('p1Canvas');
-        const canvases = [document.getElementById('p1Canvas'), document.getElementById('p2Canvas')];
-        // const context = p1Canvas.getContext('2d');
-
-        function resizeCanvas(canvases) {
-            const canvasContainer = document.getElementById('canvas-container');
-            const cellWidth = canvasContainer.getBoundingClientRect().width / 2;
-            // console.log('Grid Width:', gridWidth);
-
-            
-            // Get the bounding rectangle of the canvas
-            var rect = canvases[0].getBoundingClientRect();
-
-            // Calculate the position relative to the top of the page
-            var canvasTop = rect.top + window.scrollY;
-            var canvasLeft = rect.left + window.scrollX;
-
-            console.log('Canvas (0,0) position relative to the top of the page:');
-            console.log('Top: ' + canvasTop + 'px');
-            console.log('Left: ' + canvasLeft + 'px');
-
-            canvases[0].width = cellWidth;
-            canvases[0].height = window.innerHeight - canvasTop;
-
-            canvases[1].width = cellWidth;
-            canvases[1].height = window.innerHeight - canvasTop;
-            // canvases[0].height = 700;
-
-
-            draw(canvases[0]);
-        }
-
-        function draw(canvas) {
-            context = canvas.getContext('2d')
-
-            // Clear the canvas
-            context.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Draw a rectangle (example)
-            context.fillStyle = 'blue';
-            context.fillRect(50, 50, canvas.width - 100, canvas.height - 100);
-        }
-
-        // Resize the canvas when the window is resized
-        window.addEventListener('resize', resizeCanvas(canvases));
-
-        // Initial resize to set the canvas size
-        resizeCanvas(canvases);
-
-    </script>
+    
 
 
 </body>
