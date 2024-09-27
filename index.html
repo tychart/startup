@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tetris Dual</title>
     <link rel="icon" href="favicon.png" type="image/png">
+    <style>
+        html, body {
+            background-color: #1f1f1f;
+            color: white;
+        }
+    </style>
 </head>
 
 
@@ -12,10 +18,16 @@
     <header>
         <h1>Tetris Dual</h1>
     </header>
+    <nav class="nav-container">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#contact">Contact</a>
+    </nav>
 
     <main>
         <p>Welcome to Tetris Dual, please sign in:</p>
-        <form action="/login" method="post">
+       <form action="/site/play.html" method="post">
             <label style="font-family: monospace;" for="username">Username:</label>
             <input type="text" id="username" name="username" required>
             <br>
@@ -23,14 +35,18 @@
             <input type="password" id="password" name="password" required>
             <br>
             <button type="submit">Login</button>
-        </form>
+        </form> 
         <br>
-        <form action="/register">
+        <form action="/site/play.html">
             <label for="password">No Account?</label>
             <br>
             <button type="submit">Register Here</button>
         </form>
     </main>
+
+    <footer>
+        <h7>My Footer with my Github Link https://github.com/tychart/startup</h7>
+    </footer>
 
 
 
