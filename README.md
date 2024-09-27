@@ -20,7 +20,7 @@ My app will let 2 people play the classic game of Tetris but this version you ge
 * Database: A storage of logins and user info, also high scores
 * WebSocket: The row that the opponent just completed will be pushed to the client by use of websockets
 
-## Deliverable: HTML\
+## Deliverable: HTML
 
 * For this deliverable I made 4 pages, all single html files.
     * my main login page
