@@ -27,14 +27,6 @@
             color: white;
         }
 
-
-        .header h1 {
-            margin: 0;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
         .github-link {
             margin-left: auto;
             color: white;
@@ -44,38 +36,28 @@
             border-radius: 5px;
         }
 
-        main {
+        .container {
+            flex-grow: 1;
             display: flex;
             flex-direction: row;
-            flex-grow: 1;
-            border: 5px solid yellow;
-            flex-grow: 1;
-            align-items: stretch;
             justify-content: space-between;
         }
 
-        
-
         .column {
-            border: 10px solid green;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
         }
 
-        .column h2 {
-            color: white;
-            text-align: center;
-            align-items: center;
-            height: 20px;
+        .card {
+            margin: auto;
+            width: 300px;
         }
-
 
         canvas {
             display: block;
             background-color: white;
             border: 5px solid blue;
-            margin:auto
         }
          
     </style>
