@@ -12,35 +12,45 @@
             background-color: #1f1f1f;
             color: white;
         }
+        .navbar-toggler.justify-content-end {
+            margin-left: auto;
+        }
     </style>
 </head>
 
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="/index.html">Tetris Dual</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/index.html">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/site/play.html">About</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/site/leaderboard.html">Leaderboard</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/site/contact.html">Contact</a>
-              </li>
-            </ul>
-          </div>
+  <header class="text-bg-dark">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark" aria-label="Navbar">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Tetris Dual</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto mb-2 mb-sm-0">
+            <li class="nav-item">
+              <a class="nav-link active" href="/index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/site/play.html">Play</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/site/leaderboard.html">Leaderboard</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="/site/about.html">About</a>
+          </li>
+          </ul>
+          <form role="button">
+            <a href="https://github.com/tychart/startup" class="btn btn-secondary">GitHub</a>
+          </form>
         </div>
-      </nav>
+      </div>
+    </nav>
+  </header>
+
+
     
 
     <main>

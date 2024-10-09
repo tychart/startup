@@ -18,14 +18,14 @@
             background-color: #1f1f1f;
         }
 
-        .header {
+        /* .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 10px;
             background-color: #333;
             color: white;
-        }
+        } */
 
 
         .header h1 {
@@ -39,9 +39,10 @@
             margin-left: auto;
             color: white;
             text-decoration: none;
-            padding: 5px 10px;
             background-color: #444;
             border-radius: 5px;
+            padding: 5px 10px;
+            margin-right: 10px
         }
 
         main {
@@ -83,12 +84,37 @@
 
 
 <body >
-    <header class="header">
-        <h1>Tetris Dual</h1>
-        <!-- <p>I'll use api calls to make a cool auto changing backgroud</p>
-        <div>I will also have the websockets send tetris blocks accross to the opponent</div> -->
-        <a href="https://github.com/tychart/startup" class="github-link">GitHub</a>
-    </header>
+  <header class="text-bg-dark">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark" aria-label="Navbar">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Tetris Dual</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto mb-2 mb-sm-0">
+            <li class="nav-item">
+              <a class="nav-link" href="/index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/site/play.html">Play</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/site/leaderboard.html">Leaderboard</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="/site/about.html">About</a>
+          </li>
+          </ul>
+          <form role="button">
+            <a href="https://github.com/tychart/startup" class="btn btn-secondary">GitHub</a>
+          </form>
+        </div>
+      </div>
+    </nav>
+  </header>
+    
+      
 
     <main>        
         <div class="column" id="column1">
