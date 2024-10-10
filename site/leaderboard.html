@@ -9,8 +9,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <style>
         html, body {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
             background-color: #1f1f1f;
             color: white;
+        }
+
+        main {
+          flex: 1;
         }
     </style>
 </head>
@@ -81,9 +88,10 @@
     </table>
   </main>
 
-  <footer>
-      <h7>My Footer with my Github Link https://github.com/tychart/startup</h7>
-      <a href="https://github.com/tychart/startup" class="github-link">GitHub</a>
+  <footer class="bg-dark text-white-50">
+    <div class="container-fluid">
+      <span class="text-reset" id="footer-text">Tyler Chartrand</span>
+    </div>
   </footer>
 
 
