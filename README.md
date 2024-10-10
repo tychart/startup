@@ -31,3 +31,14 @@ My app will let 2 people play the classic game of Tetris but this version you ge
 * The play.html page is the one I spent the most time on getting flex to work at a basic level, but the canvases still do not auto resize
 * For Web Service: I will have a background behind the game that will be pulled using an api library of images to encourage competition
 * For WebSocket: The row that the opponent just completed will be pushed to the client by use of websockets
+
+## Deliverable: CSS
+
+* I modified my 4 html files using embeded CSS
+    * my main login page
+    * My main game page
+    * My Leaderboard Page
+    * My contact page
+    * The background image is a gif that will animate and stretch to fit the screen.
+    * The blocks are all styled using flexbox
+* I also added some example data to the leaderboard page, but it is not being pulled from the database
