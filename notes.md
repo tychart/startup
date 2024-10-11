@@ -23,3 +23,10 @@ const result = testAll(
   }
 );
 ```
+
+* Example of sorting objects
+```{javascript}
+currentData.sort((a, b) => a[header].toString().localeCompare(b[header].toString()));
+```
+
+
