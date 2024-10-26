@@ -25,8 +25,12 @@ export class Block {
     move(board, dx, dy) {
         let collision = false;
 
-        // Don't move, but don't freeze and generate a new block
-        if (this.checkBlockSideCollision(board, dx)) {return true;} 
+        // Only evaluates side collisions if moving to the side
+        if (dx !== 0) {
+            // Don't move, but don't freeze and generate a new block
+            if (this.checkBlockSideCollision(board, dx)) {return true;}
+        }
+ 
         
 
         collision = this.checkBlockCollision(board, dx, dy);
