@@ -1,34 +1,68 @@
+import { Subblock } from './subblock.js';
+
 export class Block {
-    constructor(x, y, color, size) {
-        this.x = x;           // x position on the grid
-        this.y = y;           // y position on the grid
-        this.color = color;   // color of the block
-        this.size = size;     // size of the block
+    constructor(id, x, y, color, size) {
+        this.id = id;
+        this.orginX = x;           // x position on the grid
+        this.orginY = y;           // y position on the grid
+        this.color = color;         // color of the block
+        this.size = size;           // size of the block
+        this.block = [];           // Initialize the block array
+
+        // Populate the block array with Subblock instances
+        this.block.push(new Subblock(this.id, this.orginX - 1, this.orginY, this.color, this.size));
+        this.block.push(new Subblock(this.id, this.orginX, this.orginY, this.color, this.size));
+        this.block.push(new Subblock(this.id, this.orginX + 1, this.orginY, this.color, this.size));
+        this.block.push(new Subblock(this.id, this.orginX + 1, this.orginY - 1, this.color, this.size));
     }
 
-    // Method to draw the block on the canvas
     draw(ctx) {
-        ctx.fillStyle = this.color;
-        ctx.fillRect(
-            this.x * this.size, 
-            this.y * this.size, 
-            this.size, 
-            this.size);
-        ctx.strokeStyle = "black"; // outline color
-        ctx.strokeRect(
-            this.x * this.size, 
-            this.y * this.size, 
-            this.size, 
-            this.size
-        );
-
+        for (let i = 0; i < this.block.length; i++) {
+            this.block[i].draw(ctx);
+        }
     }
 
-    // Method to move the block (e.g., move down or to the side)
-    move(dx, dy) {
-        this.x += dx;
-        this.y += dy;
+    move(board, dx, dy) {
+        let collision = false;
+
+        // Don't move, but don't freeze and generate a new block
+        if (this.checkBlockSideCollision(board, dx)) {return true;} 
+        
+
+        collision = this.checkBlockCollision(board, dx, dy);
+
+        if (collision) {
+            this.freezeBlock(board)
+            return false;
+        }
+
+        // Move the block
+        for (let i = 0; i < this.block.length; i++) {
+            this.block[i].move(dx, dy)
+        }
+        return true;
     }
 
-    // Optional: Add methods for rotating, changing color, etc.
+    freezeBlock(board) {
+        for (let i = 0; i < this.block.length; i++) {
+            this.block[i].freezeSubblock(board);
+        }
+    }
+
+    checkBlockSideCollision(board, dx, dy) {
+        for (let i = 0; i < this.block.length; i++) {
+            if (this.block[i].checkSideCollision(board, dx)) {
+                return true; // Don't move, but don't freeze and generate a new block
+            }
+        }
+    }
+
+    checkBlockCollision(board, dx, dy) {
+        for (let i = 0; i < this.block.length; i++) {
+            if (this.block[i].checkBlockCollision(board, dx, dy)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
