@@ -1,10 +1,15 @@
 export class Subblock {
-    constructor(id, x, y, color, size) {
-        this.id = id;
+    constructor(x, y, color, size) {
+        // this.id = id;
         this.x = x;           // x position on the grid
         this.y = y;           // y position on the grid
         this.color = color;   // color of the block
         this.size = size;     // size of the block
+    }
+
+    // Copy constructor
+    copy() {
+        return new Subblock(this.x, this.y, this.color, this.size);
     }
 
     // Method to draw the block on the canvas
@@ -26,9 +31,19 @@ export class Subblock {
     }
 
     // Method to move the block (e.g., move down or to the side)
-    move(dx, dy) {
-        this.x += dx;
-        this.y += dy;
+    move(board, dx, dy) {
+
+        if (
+            !this.checkBlockCollision(board, dx, dy) &&
+            !this.checkSideCollision(board, dx)
+        ) {
+            this.x += dx;
+            this.y += dy;
+            return true;
+        }
+
+        return false;
+        
     }
 
     checkSideCollision(board, dx) {
@@ -50,6 +65,10 @@ export class Subblock {
         let newX = this.x + dx;
         let newY = this.y + dy;
         
+        return this.checkBlockCollisionExact(board, newX, newY);
+    }
+
+    checkBlockCollisionExact(board, newX, newY) {
         if (newY >= 20) { // hit the bottom
             return true;
         }

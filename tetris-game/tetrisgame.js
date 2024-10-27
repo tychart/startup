@@ -33,14 +33,14 @@ for (let i = 0; i < 20; i++) {
     board[i] = new Array(10).fill(0);
 }
 // let currentBlock = null;
-let currentBlock = new Block(currBlockID++, 5, 10, 'blue', blockSize);
+let currentBlock = new Block(5, 10, 'blue', blockSize);
 // let currentBlock = new OrangeRicky(5, 10, 'blue', blockSize);
 
 
 function onGameTick() {
     let movedBlock = moveBlockDown();
     if (!movedBlock) {
-        currentBlock = new Block(currBlockID++, 5, 5, 'red', blockSize);
+        currentBlock = new OrangeRicky(5, 5, 'orange', blockSize);
     }
     updateScreen();
 }
@@ -134,7 +134,7 @@ document.addEventListener('keydown', (e) => {
             break;
         case 'ArrowUp':
             console.log('down');
-            currentBlock.rotateCounterClockwise();
+            currentBlock.rotateClockwise(board);
             updateScreen();
             break;
         case 'ArrowDown':

@@ -1,19 +1,26 @@
 import { Subblock } from './subblock.js';
 
 export class Block {
-    constructor(id, x, y, color, size) {
-        this.id = id;
+    constructor(x, y, color, size) {
+        // this.id = id;
         this.orginX = x;           // x position on the grid
         this.orginY = y;           // y position on the grid
         this.color = color;         // color of the block
         this.size = size;           // size of the block
         this.block = [];           // Initialize the block array
+        this.positions = [];
+        
+        this.generateBlock();
+        
+        
+    }
 
+    generateBlock() { // Orange ricky by defaults
         // Populate the block array with Subblock instances
-        this.block.push(new Subblock(this.id, this.orginX - 1, this.orginY, this.color, this.size));
-        this.block.push(new Subblock(this.id, this.orginX, this.orginY, this.color, this.size));
-        this.block.push(new Subblock(this.id, this.orginX + 1, this.orginY, this.color, this.size));
-        this.block.push(new Subblock(this.id, this.orginX + 1, this.orginY - 1, this.color, this.size));
+        this.block.push(new Subblock(this.orginX - 2, this.orginY, this.color, this.size));
+        this.block.push(new Subblock(this.orginX - 1, this.orginY, this.color, this.size));
+        this.block.push(new Subblock(this.orginX, this.orginY, this.color, this.size));
+        this.block.push(new Subblock(this.orginX + 1, this.orginY, this.color, this.size));
     }
 
     draw(ctx) {
@@ -34,13 +41,13 @@ export class Block {
         collision = this.checkBlockCollision(board, dx, dy);
 
         if (collision) {
-            this.freezeBlock(board)
+            this.freezeBlock(board);
             return false;
         }
 
         // Move the block if no collisions occur
         for (let i = 0; i < this.block.length; i++) {
-            this.block[i].move(dx, dy)
+            this.block[i].move(board, dx, dy);
         }
         return true;
     }
@@ -67,22 +74,28 @@ export class Block {
         }
         return false;
     }
+    
+    // Method intended to be implemented by subclasses
+    rotateClockwise(board) {
+        let newBlock = this.copyBlock();
+        let successes = [];
+    
+        successes = this.positions[this.currPos](board, newBlock, successes);
 
-    rotateCounterClockwise() {
-        for (let i = 0; i < this.block.length; i++) {
-            let subblock = this.block[i];
-
-            // Translate Subblock to origin
-            let relativeX = subblock.x - this.originX;
-            let relativeY = subblock.y - this.originY;
-
-            // Apply rotation matrix for counterclockwise rotation
-            let rotatedX = relativeY;
-            let rotatedY = -relativeX;
-
-            // Translate back to the original position
-            subblock.x = this.originX + rotatedX;
-            subblock.y = this.originY + rotatedY;
+        if (successes.includes(false)) {
+            return false;
         }
+
+        this.block = newBlock;
+        this.incrimentCurrPos();
+        
+        return true;
     }
+    
+    // Method intended to be implemented by subclasses
+    rotateCounterClockwise() {
+        throw new Error("Method 'rotateCounterClockwise()' must be implemented in subclass");
+    }
+
+
 }
