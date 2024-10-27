@@ -1,7 +1,7 @@
 import { Subblock } from './subblock.js';
 import { Block  } from './block.js';
 
-export class OrangeRicky {
+export class OrangeRicky extends Block {
     constructor(x, y, color, size) {
         this.orginX = x;           // x position on the grid
         this.orginY = y;           // y position on the grid

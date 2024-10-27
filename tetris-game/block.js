@@ -30,8 +30,6 @@ export class Block {
             // Don't move, but don't freeze and generate a new block
             if (this.checkBlockSideCollision(board, dx)) {return true;}
         }
- 
-        
 
         collision = this.checkBlockCollision(board, dx, dy);
 
@@ -40,7 +38,7 @@ export class Block {
             return false;
         }
 
-        // Move the block
+        // Move the block if no collisions occur
         for (let i = 0; i < this.block.length; i++) {
             this.block[i].move(dx, dy)
         }
@@ -68,5 +66,23 @@ export class Block {
             }
         }
         return false;
+    }
+
+    rotateCounterClockwise() {
+        for (let i = 0; i < this.block.length; i++) {
+            let subblock = this.block[i];
+
+            // Translate Subblock to origin
+            let relativeX = subblock.x - this.originX;
+            let relativeY = subblock.y - this.originY;
+
+            // Apply rotation matrix for counterclockwise rotation
+            let rotatedX = relativeY;
+            let rotatedY = -relativeX;
+
+            // Translate back to the original position
+            subblock.x = this.originX + rotatedX;
+            subblock.y = this.originY + rotatedY;
+        }
     }
 }

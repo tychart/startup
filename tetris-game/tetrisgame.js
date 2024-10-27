@@ -132,6 +132,11 @@ document.addEventListener('keydown', (e) => {
             moveHorizontal(1);
             updateScreen();
             break;
+        case 'ArrowUp':
+            console.log('down');
+            currentBlock.rotateCounterClockwise();
+            updateScreen();
+            break;
         case 'ArrowDown':
             console.log('down');
             fallBlock();
