@@ -10,11 +10,7 @@ export class OrangeRicky extends Block {
         this.currPos = 0;
 
         this.initializePositions();
-
-        this.block.push(new Subblock(this.orginX - 1, this.orginY, this.color, this.size));
-        this.block.push(new Subblock(this.orginX, this.orginY, this.color, this.size));
-        this.block.push(new Subblock(this.orginX + 1, this.orginY, this.color, this.size));
-        this.block.push(new Subblock(this.orginX + 1, this.orginY - 1, this.color, this.size));
+        this.generateBlock();
     }
 
     generateBlock() {
@@ -24,22 +20,6 @@ export class OrangeRicky extends Block {
         this.block.push(new Subblock(this.orginX + 1, this.orginY - 1, this.color, this.size));
     }
 
-
-    // rotateClockwise(board) {
-    //     let newBlock = this.copyBlock();
-    //     let successes = [];
-    
-    //     successes = this.positions[this.currPos](board, newBlock, successes);
-
-    //     if (successes.includes(false)) {
-    //         return false;
-    //     }
-
-    //     this.block = newBlock;
-    //     this.incrimentCurrPos();
-        
-    //     return true;
-    // }
 
     initializePositions() {
         this.positions = [
@@ -70,33 +50,7 @@ export class OrangeRicky extends Block {
         ]
     }
 
-    incrimentCurrPos() {
-        if (this.currPos === this.positions.length -1) {
-            this.currPos = 0;
-        } else {
-            this.currPos++;
-        }
-    }
 
-    copyBlock() {
-        let newBlock = [];
-        for (let subblock of this.block) {
-            newBlock.push(subblock.copy());
-        }
-        return newBlock;
-    }
-
-    checkSuccess(successes) {
-        for (let success of successes) {
-            if (!success) return false;
-        }
-    }
-
-    // draw(ctx) {
-    //     for (let i = 0; i < this.blocks.length; i++) {
-    //         this.blocks[i].draw(ctx);
-    //     }
-    // }
 
 
 

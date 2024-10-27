@@ -91,6 +91,28 @@ export class Block {
         
         return true;
     }
+
+    incrimentCurrPos() {
+        if (this.currPos === this.positions.length -1) {
+            this.currPos = 0;
+        } else {
+            this.currPos++;
+        }
+    }
+
+    copyBlock() {
+        let newBlock = [];
+        for (let subblock of this.block) {
+            newBlock.push(subblock.copy());
+        }
+        return newBlock;
+    }
+
+    checkSuccess(successes) {
+        for (let success of successes) {
+            if (!success) return false;
+        }
+    }
     
     // Method intended to be implemented by subclasses
     rotateCounterClockwise() {
