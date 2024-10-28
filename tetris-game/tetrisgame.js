@@ -1,6 +1,10 @@
 import { Subblock } from './subblock.js';
 import { Block  } from './block.js';
 import { OrangeRicky } from './orange-ricky.js';
+import { BlueRicky } from './blue-ricky.js';
+import { ClevelandZ } from './cleveland-z.js';
+import { RhodeIslandZ } from './rhode-island-z.js';
+
 
 
 const canvas = document.getElementById('canvas');
@@ -33,14 +37,14 @@ for (let i = 0; i < 20; i++) {
     board[i] = new Array(10).fill(0);
 }
 // let currentBlock = null;
-let currentBlock = new Block(5, 10, 'blue', blockSize);
+let currentBlock = new RhodeIslandZ(5, 3, 'green', blockSize);
 // let currentBlock = new OrangeRicky(5, 10, 'blue', blockSize);
 
 
 function onGameTick() {
     let movedBlock = moveBlockDown();
     if (!movedBlock) {
-        currentBlock = new OrangeRicky(5, 5, 'orange', blockSize);
+        currentBlock = getRandNewBlock();
     }
     updateScreen();
 }
@@ -116,6 +120,29 @@ const colors = [
     '#FF0',
     '#0FF'
 ];
+
+function getRandNewBlock() {
+    // Step 1: Generate a random number between 0 and 5 (for 6 possible outcomes)
+    const randomChoice = Math.floor(Math.random() * 2);
+
+    // Step 2: Use a switch statement to return a new block based on the random choice
+    switch (randomChoice) {
+        case 0:
+            return new OrangeRicky(5, 5, 'orange', blockSize);
+        case 1:
+            return new BlueRicky(5, 5, 'blue', blockSize);
+        // case 2:
+        //     return new ClevelandZ(5, 5, 'red', blockSize);
+        // case 3:
+        //     return new RhodeIslandZ(5, 5, 'green', blockSize);
+        // case 4:
+        //     return new Hero(5, 5, 'cyan', blockSize);
+        // case 5:
+        //     return new Teewee(5, 5, 'purple', blockSize);
+        default:
+            throw new Error("Unexpected choice in getRandNewBlock()");
+    }
+}
 
 
 setInterval(onGameTick, gameTick);
