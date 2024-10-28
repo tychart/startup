@@ -4,7 +4,7 @@ import { OrangeRicky } from './orange-ricky.js';
 import { BlueRicky } from './blue-ricky.js';
 import { ClevelandZ } from './cleveland-z.js';
 import { RhodeIslandZ } from './rhode-island-z.js';
-import { Hero } from './hero.js';
+// import { Hero } from './hero.js';
 
 
 
@@ -38,7 +38,7 @@ for (let i = 0; i < 20; i++) {
     board[i] = new Array(10).fill(0);
 }
 // let currentBlock = null;
-let currentBlock = new Hero(5, 3, 'cyan', blockSize);
+let currentBlock = new OrangeRicky(5, 3, 'cyan', blockSize);
 // let currentBlock = new OrangeRicky(5, 10, 'blue', blockSize);
 
 
