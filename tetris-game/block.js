@@ -3,8 +3,8 @@ import { Subblock } from './subblock.js';
 export class Block {
     constructor(x, y, color, size) {
         // this.id = id;
-        this.orginX = x;           // x position on the grid
-        this.orginY = y;           // y position on the grid
+        this.originX = x;           // x position on the grid
+        this.originY = y;           // y position on the grid
         this.color = color;         // color of the block
         this.size = size;           // size of the block
         this.block = [];           // Initialize the block array
@@ -17,10 +17,10 @@ export class Block {
 
     generateBlock() { // Orange ricky by defaults
         // Populate the block array with Subblock instances
-        this.block.push(new Subblock(this.orginX - 2, this.orginY, this.color, this.size));
-        this.block.push(new Subblock(this.orginX - 1, this.orginY, this.color, this.size));
-        this.block.push(new Subblock(this.orginX, this.orginY, this.color, this.size));
-        this.block.push(new Subblock(this.orginX + 1, this.orginY, this.color, this.size));
+        this.block.push(new Subblock(this.originX - 2, this.originY, this.color, this.size));
+        this.block.push(new Subblock(this.originX - 1, this.originY, this.color, this.size));
+        this.block.push(new Subblock(this.originX, this.originY, this.color, this.size));
+        this.block.push(new Subblock(this.originX + 1, this.originY, this.color, this.size));
     }
 
     draw(ctx) {

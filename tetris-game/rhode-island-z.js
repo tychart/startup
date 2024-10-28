@@ -14,10 +14,10 @@ export class RhodeIslandZ extends Block {
     }
 
     generateBlock() {
-        this.block.push(new Subblock(this.orginX - 1, this.orginY, this.color, this.size));
-        this.block.push(new Subblock(this.orginX, this.orginY, this.color, this.size));
-        this.block.push(new Subblock(this.orginX, this.orginY - 1, this.color, this.size));
-        this.block.push(new Subblock(this.orginX + 1, this.orginY - 1, this.color, this.size));
+        this.block.push(new Subblock(this.originX - 1, this.originY, this.color, this.size));
+        this.block.push(new Subblock(this.originX, this.originY, this.color, this.size));
+        this.block.push(new Subblock(this.originX, this.originY - 1, this.color, this.size));
+        this.block.push(new Subblock(this.originX + 1, this.originY - 1, this.color, this.size));
     }
 
 
