@@ -95,19 +95,19 @@ function getRandNewBlock() {
     // Step 2: Use a switch statement to return a new block based on the random choice
     switch (randomChoice) {
         case 0:
-            return new OrangeRicky(5, 5, 'orange', blockSize);
+            return new OrangeRicky(4, 2, 'orange', blockSize);
         case 1:
-            return new BlueRicky(5, 5, 'blue', blockSize);
+            return new BlueRicky(4, 2, 'blue', blockSize);
         case 2:
-            return new ClevelandZ(5, 5, 'red', blockSize);
+            return new ClevelandZ(4, 2, 'red', blockSize);
         case 3:
-            return new RhodeIslandZ(5, 5, 'green', blockSize);
+            return new RhodeIslandZ(4, 2, 'green', blockSize);
         case 4:
-            return new Hero(5, 5, 'cyan', blockSize);
+            return new Hero(4, 2, 'cyan', blockSize);
         case 5:
-            return new Teewee(5, 5, 'purple', blockSize);
+            return new Teewee(4, 2, 'purple', blockSize);
         case 6:
-            return new Smashboy(5, 5, 'yellow', blockSize);
+            return new Smashboy(4, 2, 'yellow', blockSize);
         default:
             throw new Error("Unexpected choice in getRandNewBlock()");
     }
