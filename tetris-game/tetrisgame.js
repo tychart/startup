@@ -33,7 +33,8 @@ let currentBlock = new Smashboy(5, 3, 'yellow', blockSize);
 function onGameTick() {
     let movedBlock = moveBlockDown();
     if (!movedBlock) {
-        currentBlock = getRandNewBlock();
+        currentBlock = getRandNewBlockDebug();
+        // currentBlock = getRandNewBlock();
     }
     scanBoard();
     updateScreen();
@@ -93,6 +94,11 @@ const colors = [
     '#0FF'
 ];
 
+function getRandNewBlockDebug() {
+    return new OrangeRicky(4, 2, 'orange', blockSize);
+}
+
+
 function getRandNewBlock() {
     // Step 1: Generate a random number between 0 and 6 (for 7 possible outcomes)
     const randomChoice = Math.floor(Math.random() * 7);
@@ -129,7 +135,7 @@ function scanBoard() {
                  count++;
              }
         }
-        if (count === board.length - 1) {
+        if (count === board[row].length) {
             clearRow(row);
         }
 
@@ -143,17 +149,32 @@ function clearRow(rowIndex) {
     for (let col = 0; col < board[rowIndex].length; col++) {
         board[rowIndex][col] = 0;
     }
+    drawScreen();
 
     // Step 2: Move all blocks above that row down one row
-    for (let row = rowIndex + 1; row < board.length; row++) {
-        for (let col = 0; col < board[row].length; col++) {
-             let block = board[row][col];
-             if (block !== 0) {
-                 board[row - 1][col] = block;
-                 board[row][col] = 0;
-             }
-         }
-     }
+    for (let row = rowIndex; row > 0; row--) {
+        for (let block = 0; block < board[row].length; block++) {
+            if (board[row - 1][block] !== 0) {
+                board[row - 1][block].moveExact(block, row);
+            }
+        }
+        board[row] = board[row - 1];
+        renderBoard();
+    }
+
+    // Step 3: Zero the top row of the board.
+    for (let col = 0; col < board[0].length; col++) {
+        board[0][col] = 0;
+    }
+        
+    //     for (let col = 0; col < board[row].length; col++) {
+    //          let block = board[row][col];
+    //          if (block !== 0) {
+    //              board[row - 1][col] = block;
+    //              board[row][col] = 0;
+    //          }
+    //      }
+    //  }
 }
 
 

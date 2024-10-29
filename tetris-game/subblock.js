@@ -46,6 +46,11 @@ export class Subblock {
         
     }
 
+    moveExact(newX, newY) {
+        this.x = newX;
+        this.y = newY;
+    }
+
     checkSideCollision(board, dx) {
         let newX = this.x + dx;
 
@@ -54,7 +59,10 @@ export class Subblock {
         }
 
         // Check collision with other blocks
-        if (board[this.y][newX] != 0) {
+        if (
+            board[this.y][newX] !== 0 &&
+            board[this.y][newX] !== this
+        ) {
             return true;
         }
         return false;
