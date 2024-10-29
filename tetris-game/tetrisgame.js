@@ -156,25 +156,30 @@ function clearRow(rowIndex) {
         for (let block = 0; block < board[row].length; block++) {
             if (board[row - 1][block] !== 0) {
                 board[row - 1][block].moveExact(block, row);
+                renderBoard();
+                blockingDelay(100);
             }
         }
         board[row] = board[row - 1];
+
+        
         renderBoard();
+        blockingDelay(100);
+
     }
 
     // Step 3: Zero the top row of the board.
     for (let col = 0; col < board[0].length; col++) {
         board[0][col] = 0;
     }
-        
-    //     for (let col = 0; col < board[row].length; col++) {
-    //          let block = board[row][col];
-    //          if (block !== 0) {
-    //              board[row - 1][col] = block;
-    //              board[row][col] = 0;
-    //          }
-    //      }
-    //  }
+
+}
+
+function blockingDelay(ms) {
+    const start = Date.now();
+    while (Date.now() - start < ms) {
+        // Do nothing, just loop until the specified time has passed
+    }
 }
 
 
