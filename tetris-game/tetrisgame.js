@@ -33,8 +33,8 @@ let currentBlock = new Smashboy(5, 3, 'yellow', blockSize);
 function onGameTick() {
     let movedBlock = moveBlockDown();
     if (!movedBlock) {
-        currentBlock = getRandNewBlockDebug();
-        // currentBlock = getRandNewBlock();
+        // currentBlock = getRandNewBlockDebug();
+        currentBlock = getRandNewBlock();
     }
     scanBoard();
     updateScreen();
