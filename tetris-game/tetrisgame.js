@@ -35,6 +35,7 @@ function onGameTick() {
     if (!movedBlock) {
         currentBlock = getRandNewBlock();
     }
+    scanBoard();
     updateScreen();
 }
 
@@ -73,9 +74,13 @@ function moveBlockDown() {
     return currentBlock.move(board, 0, 1);
 }
 
-function fallBlock() {
-    //temp for testing
+function fallBlockSoft() {
     moveBlockDown();   
+}
+
+function fallBlockHard() {
+    while (currentBlock.move(board, 0, 1)) {
+    }
 }
 
 const colors = [
@@ -114,28 +119,68 @@ function getRandNewBlock() {
 }
 
 
+
+function scanBoard() {
+
+    for (let row = 0; row < board.length; row++) {
+        let count = 0;
+        for (let col = 0; col < board[row].length; col++) {
+            if (board[row][col] !== 0) {
+                 count++;
+             }
+        }
+        if (count === board.length - 1) {
+            clearRow(row);
+        }
+
+        
+    }
+
+}
+
+function clearRow(rowIndex) {
+    // Step 1: Clear the row at rowIndex
+    for (let col = 0; col < board[rowIndex].length; col++) {
+        board[rowIndex][col] = 0;
+    }
+
+    // Step 2: Move all blocks above that row down one row
+    for (let row = rowIndex + 1; row < board.length; row++) {
+        for (let col = 0; col < board[row].length; col++) {
+             let block = board[row][col];
+             if (block !== 0) {
+                 board[row - 1][col] = block;
+                 board[row][col] = 0;
+             }
+         }
+     }
+}
+
+
 setInterval(onGameTick, gameTick);
 
 document.addEventListener('keydown', (e) => {
+    console.log(e.key);
     switch (e.key) {
         case 'ArrowLeft':
-            console.log('left');
             moveHorizontal(-1);
             updateScreen();
             break;
         case 'ArrowRight':
-            console.log('right');
             moveHorizontal(1);
             updateScreen();
             break;
         case 'ArrowUp':
-            console.log('down');
             currentBlock.rotateClockwise(board);
             updateScreen();
             break;
         case 'ArrowDown':
-            console.log('down');
-            fallBlock();
+            fallBlockSoft();
+            updateScreen();
+            break;
+        case ' ':
+            e.preventDefault();  // Prevent default space behavior
+            fallBlockHard();
             updateScreen();
             break;
     }
