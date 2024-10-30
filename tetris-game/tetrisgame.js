@@ -12,6 +12,7 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 const gameTick = 1000; // One Second
+const animationSpeed = gameTick / 50;
 
 const width = canvas.width;
 const height = canvas.height;
@@ -126,7 +127,8 @@ function getRandNewBlock() {
 
 
 
-function scanBoard() {
+async function scanBoard() {
+    let deletedRow = false;
 
     for (let row = 0; row < board.length; row++) {
         let count = 0;
@@ -136,36 +138,27 @@ function scanBoard() {
              }
         }
         if (count === board[row].length) {
-            clearRow(row);
+            await clearRow(row);
+            deletedRow = true;
         }
-
-        
     }
 
+    if (deletedRow) {
+        await niceBoardUpdate();
+    }
 }
 
-function clearRow(rowIndex) {
+async function clearRow(rowIndex) {
     // Step 1: Clear the row at rowIndex
     for (let col = 0; col < board[rowIndex].length; col++) {
         board[rowIndex][col] = 0;
+        updateScreen();
+        await delay(animationSpeed); // This is for the cool disepering blocks animation
     }
-    drawScreen();
 
-    // Step 2: Move all blocks above that row down one row
+    // Step 2: Move every row down one row
     for (let row = rowIndex; row > 0; row--) {
-        for (let block = 0; block < board[row].length; block++) {
-            if (board[row - 1][block] !== 0) {
-                board[row - 1][block].moveExact(block, row);
-                renderBoard();
-                blockingDelay(100);
-            }
-        }
         board[row] = board[row - 1];
-
-        
-        renderBoard();
-        blockingDelay(100);
-
     }
 
     // Step 3: Zero the top row of the board.
@@ -175,11 +168,23 @@ function clearRow(rowIndex) {
 
 }
 
-function blockingDelay(ms) {
-    const start = Date.now();
-    while (Date.now() - start < ms) {
-        // Do nothing, just loop until the specified time has passed
+// Goes through and makes sure the subblock's internal 
+// corridinates match where it is on the board grid
+async function niceBoardUpdate() {
+    for (let row = board.length - 1; row >= 0; row--) {
+        for (let block = 0; block < board[row].length; block++) {
+            if (board[row][block] !== 0) {
+                board[row][block].moveExact(block, row);
+                updateScreen();
+                await delay(animationSpeed);
+            }
+        }
     }
+}
+
+// Helper function to create a non-blocking delay
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 
