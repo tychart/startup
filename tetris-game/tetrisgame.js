@@ -19,6 +19,11 @@ const height = canvas.height;
 
 const blockSize = width / 10
 
+const startingX = 4;
+const startingY = 2;
+
+let gameGoing = true;
+
 let currBlockID = 0;
 
 console.log("test" + blockSize)
@@ -29,16 +34,21 @@ for (let i = 0; i < 20; i++) {
     board[i] = new Array(10).fill(0);
 }
 
-let currentBlock = new Smashboy(5, 3, 'yellow', blockSize);
+let currentBlock = getRandNewBlock();
 
 function onGameTick() {
-    let movedBlock = moveBlockDown();
-    if (!movedBlock) {
-        // currentBlock = getRandNewBlockDebug();
-        currentBlock = getRandNewBlock();
+    if (gameGoing) {
+        let movedBlock = moveBlockDown();
+        if (!movedBlock) {
+            if (currentBlock.originX === startingX && currentBlock.originY === startingY) {
+                gameOver();
+            }
+            // currentBlock = getRandNewBlockDebug();
+            currentBlock = getRandNewBlock();
+        }
+        scanBoard();
+        updateScreen(); 
     }
-    scanBoard();
-    updateScreen();
 }
 
 
@@ -83,6 +93,7 @@ function fallBlockSoft() {
 function fallBlockHard() {
     while (currentBlock.move(board, 0, 1)) {
     }
+    onGameTick();
 }
 
 const colors = [
@@ -107,19 +118,19 @@ function getRandNewBlock() {
     // Step 2: Use a switch statement to return a new block based on the random choice
     switch (randomChoice) {
         case 0:
-            return new OrangeRicky(4, 2, 'orange', blockSize);
+            return new OrangeRicky(startingX, startingY, 'orange', blockSize);
         case 1:
-            return new BlueRicky(4, 2, 'blue', blockSize);
+            return new BlueRicky(startingX, startingY, 'blue', blockSize);
         case 2:
-            return new ClevelandZ(4, 2, 'red', blockSize);
+            return new ClevelandZ(startingX, startingY, 'red', blockSize);
         case 3:
-            return new RhodeIslandZ(4, 2, 'green', blockSize);
+            return new RhodeIslandZ(startingX, startingY, 'green', blockSize);
         case 4:
-            return new Hero(4, 2, 'cyan', blockSize);
+            return new Hero(startingX, startingY, 'cyan', blockSize);
         case 5:
-            return new Teewee(4, 2, 'purple', blockSize);
+            return new Teewee(startingX, startingY, 'purple', blockSize);
         case 6:
-            return new Smashboy(4, 2, 'yellow', blockSize);
+            return new Smashboy(startingX, startingY, 'yellow', blockSize);
         default:
             throw new Error("Unexpected choice in getRandNewBlock()");
     }
@@ -185,6 +196,11 @@ async function niceBoardUpdate() {
 // Helper function to create a non-blocking delay
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function gameOver() {
+    console.log("Game Over!")
+    gameGoing = false;
 }
 
 
