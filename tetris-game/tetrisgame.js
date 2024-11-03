@@ -41,6 +41,7 @@ function onGameTick() {
         let movedBlock = moveBlockDown();
         if (!movedBlock) {
             if (currentBlock.originX === startingX && currentBlock.originY === startingY) {
+                gameGoing = false;
                 gameOver();
             }
             // currentBlock = getRandNewBlockDebug();
@@ -199,9 +200,24 @@ function delay(ms) {
 }
 
 function gameOver() {
-    console.log("Game Over!")
-    gameGoing = false;
+    console.log("Game Over!");
+
+    // Create a new popup element
+    const popup = document.createElement('div');
+    popup.classList.add('game-over-popup');
+
+    // Add a message to the popup
+    popup.innerHTML = 'Game Over!';
+
+    // Get the canvas element
+    // const canvas = document.getElementById('canvas');
+
+    const body = document.getElementById('body');
+
+    // Add the popup to the canvas
+    body.appendChild(popup);
 }
+
 
 
 setInterval(onGameTick, gameTick);

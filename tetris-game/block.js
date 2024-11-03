@@ -49,6 +49,8 @@ export class Block {
         for (let i = 0; i < this.block.length; i++) {
             this.block[i].move(board, dx, dy);
         }
+        this.originX += dx;
+        this.originY += dy;
         return true;
     }
 
