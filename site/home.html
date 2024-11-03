@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetris Dual</title>
+    <link rel="icon" href="../favicon.png" type="image/png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        html, body {
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #1f1f1f;
+            color: white;
+            background-image: url('/assets/TetrisBackgroud1.svg');
+            background-size: cover;
+            background-attachment: fixed;
+        }
+
+        main {
+          flex: 1 calc(100vh - 110px);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-around;
+        }
+
+        
+    </style>
+</head>
+
+
+<body>
+  <header class="text-bg-dark">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark" aria-label="Navbar">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/index.html">Tetris Dual</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto mb-2 mb-sm-0">
+            <li class="nav-item">
+              <a class="nav-link active" href="/index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/site/play.html">Play</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/site/leaderboard.html">Leaderboard</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="/site/about.html">About</a>
+          </li>
+          </ul>
+          <form role="button">
+            <a href="https://github.com/tychart/startup" class="btn btn-secondary">GitHub</a>
+          </form>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+
+    
+
+  <main class="container-fluid bs-dark text-center">
+    <div>
+      <h1>Welcome to Tetris Dual</h1>
+      <form method="get" action="play.html">
+        <div class="input-group mb-3">
+          <span class="input-group-text">👥</span>
+          <input class="form-control" type="text" placeholder="username">
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text">🔒</span>
+          <input class="form-control" type="password" placeholder="password">
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+        <button type="submit" class="btn btn-secondary">Register</button>
+      </form>
+    </div>
+  </main>
+
+  <footer class="bg-dark text-white-50">
+    <div class="container-fluid">
+      <span class="text-reset" id="footer-text">Tyler Chartrand</span>
+    </div>
+  </footer>
+
+
+
+</body>
+</html>
