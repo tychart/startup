@@ -1,11 +1,13 @@
 import React from 'react';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
+import { Navbar, Nav, Container } from 'react-bootstrap';
 import { Login } from './login/login';
 import { Play } from './play/play';
 import { Scores } from './scores/scores';
 import { About } from './about/about';
 import { AuthState } from './login/authState';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './app.css';
 
 function App() {
@@ -16,15 +18,15 @@ function App() {
   return (
     <BrowserRouter>
       <div className='body bg-dark text-light'>
-        <header class="text-bg-dark">
-          <nav class="navbar navbar-expand-sm navbar-dark bg-dark" aria-label="Navbar">
-            <div class="container-fluid">
-              <a class="navbar-brand" href="/index.html">Tetris Dual</a>
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+        <header className="text-bg-dark">
+          <nav className="navbar navbar-expand-sm navbar-dark bg-dark" aria-label="Navbar">
+            <div className="container-fluid">
+              <a className="navbar-brand" href="/index.html">Tetris Dual</a>
+              <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span className="navbar-toggler-icon"></span>
               </button>
-              <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-sm-0">
+              <div className="collapse navbar-collapse" id="navbarNav">
+                <ul className="navbar-nav me-auto mb-2 mb-sm-0">
                   <li className='nav-item'>
                     <NavLink className='nav-link' to=''>
                       Login
@@ -49,7 +51,7 @@ function App() {
                   </li>
                 </ul>
                 <form role="button">
-                  <a href="https://github.com/tychart/startup" class="btn btn-secondary">GitHub</a>
+                  <a href="https://github.com/tychart/startup" className="btn btn-secondary">GitHub</a>
                 </form>
               </div>
             </div>
