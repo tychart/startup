@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './scores.css';
+import './leaderboard.css';
 
 export function Scores() {
   const [scores, setScores] = React.useState([]);
