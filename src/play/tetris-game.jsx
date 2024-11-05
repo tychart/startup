@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Subblock } from './classes/subblock';
 
 export const TetrisGame = () => {
   const canvasRef = useRef(null);
@@ -8,13 +9,18 @@ export const TetrisGame = () => {
   const boardHeight = 600; // Height of the game board
   const blockSize = 30; // Size of each Tetris block
   const gameIntervalRef = useRef(null); // Ref to store interval ID
+  const [currentBlock, setCurrentBlock] = useState(new Subblock(2, 5, "red", blockSize));
 
+  let board = [];
+  for (let i = 0; i < 20; i++) {
+      board[i] = new Array(10).fill(0);
+  }
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
-    contextRef.current = context;
-    draw();
+    const ctx = canvas.getContext('2d');
+    contextRef.current = ctx;
+    // draw();
 
     // Start the game loop
     gameIntervalRef.current = setInterval(gameLoop, gameTick);
@@ -26,32 +32,15 @@ export const TetrisGame = () => {
   }, []);
 
   const updateBoard = () => {
-    // clearScreen();
-    // drawScreen();
-    draw();
-  };
-
-  const draw = () => {
-    const ctx = contextRef.current;
+    const ctx = contextRef.current; // Access ctx from ref
     ctx.clearRect(0, 0, boardWidth, boardHeight); // Clear the canvas
-
-    // // Draw a simple grid for the game board
-    // for (let x = 0; x < boardWidth; x += blockSize) {
-    //   for (let y = 0; y < boardHeight; y += blockSize) {
-    //     context.strokeStyle = '#ddd'; // Grid color
-    //     context.strokeRect(x, y, blockSize, blockSize);
-    //   }
-    // }
-
-    // ctx a sample Tetris block
-    ctx.fillStyle = 'blue';
-    ctx.fillRect(3 * blockSize, 0, blockSize, blockSize); // Sample block position
+    currentBlock.draw(ctx);
   };
 
   const gameLoop = () => {
-    // Here you can implement the logic that needs to run every gameTick
     console.log('Game tick...'); // Placeholder for game logic
-    updateBoard(); // Redraw the canvas (or you can add more game logic here)
+    currentBlock.move(board, 0, 1);
+    updateBoard(); // Update the board
   };
 
   return (
@@ -62,7 +51,7 @@ export const TetrisGame = () => {
         height={boardHeight}
         style={{ backgroundColor: 'grey', border: '5px solid red' }}
       />
-      <button onClick={draw}>Start Game</button> {/* Placeholder for game start */}
+      <button onClick={updateBoard}>Start Game</button> {/* Placeholder for game start */}
     </div>
   );
 };
