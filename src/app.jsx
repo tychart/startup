@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { Login } from './login/login';
 import { Play } from './play/play';
-import { Scores } from './leaderboard/leaderboard';
+import { Leaderboard } from './leaderboard/leaderboard';
 import { About } from './about/about';
 import { AuthState } from './login/authState';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -73,7 +73,7 @@ function App() {
             exact
           />
           <Route path='/play' element={<Play userName={userName} />} />
-          <Route path='/scores' element={<Scores />} />
+          <Route path='/leaderboard' element={<Leaderboard />} />
           <Route path='/about' element={<About />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
