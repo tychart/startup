@@ -112,12 +112,8 @@ export const TetrisGame = () => {
   }
 
   const clearRow = async (rowIndex) => {
-    // Step 1: Clear the row at rowIndex
-    for (let col = 0; col < boardRef.current[rowIndex].length; col++) {
-      boardRef.current[rowIndex][col] = 0;
-      updateCanvas();
-      await delay(animationSpeedRef.current); // This is for the cool disepering blocks animation
-    }
+    // Start the row clearing animation, but don't proceed until it's finished.
+    await clearRowAnimation(rowIndex); // Ensure this completes before continuing.
 
     // Step 2: Move every row down one row
     for (let row = rowIndex; row > 0; row--) {
@@ -131,7 +127,29 @@ export const TetrisGame = () => {
 
   }
 
+  const clearRowAnimation = (rowIndex) => {
+    return new Promise((resolve) => {
+      // Animation loop for clearing the row
+      let col = 0;
+      
+      const clearNextBlock = () => {
+        if (col < boardRef.current[rowIndex].length) {
+          boardRef.current[rowIndex][col] = 0; // Clear the block (e.g., fade out or remove)
   
+          // Update the canvas for each animation frame
+          updateCanvas();
+  
+          col++;
+          setTimeout(clearNextBlock, animationSpeedRef.current); // Continue clearing the next block after a short delay
+        } else {
+          resolve(); // Once all blocks are cleared, resolve the promise to continue the row shift
+        }
+      };
+      
+      // Start the animation
+      clearNextBlock();
+    });
+  };
 
   // Goes through and makes sure the subblock's internal 
   // corridinates match where it is on the board grid
