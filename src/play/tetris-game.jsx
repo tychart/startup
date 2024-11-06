@@ -71,13 +71,14 @@ export const TetrisGame = () => {
         ) {
           setGameRunning(false); // Game over!
           gameOver();
+          return false;
         }
         // currentBlockRef.current = getRandNewBlockDebug();
         currentBlockRef.current = getRandNewBlock();
         setCurrentBlock(currentBlockRef.current); // Update React state for rendering purposes only
         blockLiveTimeRef.current = Date.now();
       }
-    return;
+    return true;
   }
 
   const fallBlockHard = () => {
