@@ -29,7 +29,7 @@ export class Block {
         }
     }
 
-    move(board, dx, dy) {
+    move(board, dx, dy, freezeEnabled = true) {
         let collision = false;
 
         // Only evaluates side collisions if moving to the side
@@ -41,8 +41,12 @@ export class Block {
         collision = this.checkBlockCollision(board, dx, dy);
 
         if (collision) {
-            this.freezeBlock(board);
-            return false;
+            if (freezeEnabled) { // This is for the move lock reset delay
+                this.freezeBlock(board);
+                return false;
+            } else {
+                return true;
+            }
         }
 
         // Move the block if no collisions occur

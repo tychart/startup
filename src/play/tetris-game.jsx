@@ -18,7 +18,7 @@ export const TetrisGame = () => {
 
   const gameIntervalRef = useRef(null); // Ref to store interval ID
   const currentBlockRef = useRef(getRandNewBlock());
-  const blockLiveTimeRef = useRef(Date.now());
+  const lockDelayRef = useRef(Date.now());
   const gameTickRef = useRef(1000); // One second
   const animationSpeedRef = useRef(gameTickRef.current / 50);
   const boardRef = useRef(Array.from({ length: 20 }, () => Array(10).fill(0)));
@@ -61,16 +61,17 @@ export const TetrisGame = () => {
   // Handle logic for if a collision happens and if game is over
   const fallBlockSoft = () => {
 
+
+
     // Just does a sanity check that the block actualy got a chance to move before it is game over
     const currentTime = Date.now();
-    const blockHasExceededTime = currentTime - blockLiveTimeRef.current > gameTickRef.current / 2;
+    const canLock = currentTime - lockDelayRef.current > gameTickRef.current / 2;
 
-    let movedBlock = currentBlockRef.current.move(boardRef.current, 0, 1);
+    let movedBlock = currentBlockRef.current.move(boardRef.current, 0, 1, canLock);
       if (!movedBlock) {
         if (
           currentBlockRef.current.originX === startingX && 
-          currentBlockRef.current.originY === startingY &&
-          blockHasExceededTime
+          currentBlockRef.current.originY === startingY
         ) {
           setGameRunning(false); // Game over!
           gameOver();
@@ -79,14 +80,13 @@ export const TetrisGame = () => {
         // currentBlockRef.current = getRandNewBlockDebug();
         currentBlockRef.current = getRandNewBlock();
         setCurrentBlock(currentBlockRef.current); // Update React state for rendering purposes only
-        blockLiveTimeRef.current = Date.now();
         speedUpGame();
       }
     return true;
   }
 
   const fallBlockHard = () => {
-    while (currentBlockRef.current.move(boardRef.current, 0, 1)) {}
+    while (currentBlockRef.current.move(boardRef.current, 0, 1, true)) {}
     onGameTick();
   }
 
@@ -278,6 +278,7 @@ export const TetrisGame = () => {
       default:
         break;
     }
+    lockDelayRef.current = Date.now();
     updateCanvas();
   };
 
