@@ -47,13 +47,9 @@ export const TetrisGame = () => {
   }, [gameRunning]); // Depend on gameRunning
 
   const onGameTick = () => {
-    console.log('Game tick...'); // Placeholder for game logic
-
     if (gameRunning) {
       fallBlockSoft(); // Move block and check collision
       scanBoard(); // Check for completed lines
-      // subblocksReallign();
-      logBoard();
       updateCanvas(); 
     }
   };
@@ -168,16 +164,6 @@ export const TetrisGame = () => {
     }
   }
 
-  const subblocksReallign = () => {
-    for (let row = boardRef.current.length - 1; row >= 0; row--) {
-      for (let block = 0; block < boardRef.current[row].length; block++) {
-        if (boardRef.current[row][block] !== 0) {
-          boardRef.current[row][block].moveExact(block, row);
-        }
-      }
-    }
-  }
-
   // Helper function to create a non-blocking delay
   function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -239,9 +225,7 @@ export const TetrisGame = () => {
     gameIntervalRef.current = setInterval(onGameTick, gameTickRef.current);
   }
 
-  const logBoard = () => {
-    console.log(boardRef.current);
-  }
+
 
 
   
@@ -263,12 +247,12 @@ export const TetrisGame = () => {
 
     switch (event.key) {
       case 'ArrowLeft':
-        console.log('Move left');
+        // console.log('Move left');
         currentBlockRef.current.move(boardRef.current, -1, 0); // Move left
         resetLockDelay();
         break;
       case 'ArrowRight':
-        console.log('Move right');
+        // console.log('Move right');
         currentBlockRef.current.move(boardRef.current, 1, 0); // Move right
         resetLockDelay();
         break;
@@ -277,7 +261,7 @@ export const TetrisGame = () => {
         resetLockDelay();
         break;
       case 'ArrowDown':
-        console.log('Move down');
+        // console.log('Move down');
         currentBlockRef.current.move(boardRef.current, 0, 1); // Move down faster
         break;
       case ' ':
