@@ -10,8 +10,6 @@ import { Smashboy } from './classes/smashboy.js';
 export const TetrisGame = () => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
-  const gameTick = 1000; // One second
-  const animationSpeed = gameTick / 50;
   const boardWidth = 300; // Width of the game board
   const boardHeight = 600; // Height of the game board
   const blockSize = 30; // Size of each Tetris block
@@ -21,9 +19,12 @@ export const TetrisGame = () => {
   const gameIntervalRef = useRef(null); // Ref to store interval ID
   const currentBlockRef = useRef(getRandNewBlock());
   const blockLiveTimeRef = useRef(Date.now());
+  const gameTickRef = useRef(1000); // One second
+  const animationSpeedRef = useRef(gameTickRef.current / 50);
+  const boardRef = useRef(Array.from({ length: 20 }, () => Array(10).fill(0)));
 
   const [currentBlock, setCurrentBlock] = useState(currentBlockRef.current);
-  const [board, setBoard] = useState(Array.from({ length: 20 }, () => Array(10).fill(0))); // Initialize board state
+  // const [board, setBoard] = useState(Array.from({ length: 20 }, () => Array(10).fill(0))); // Initialize board state
   const [gameRunning, setGameRunning] = useState(false); // New state to track if the game is running
 
   useEffect(() => {
@@ -34,7 +35,7 @@ export const TetrisGame = () => {
 
     // Start the game loop only if the game is running
     if (gameRunning) {
-      gameIntervalRef.current = setInterval(onGameTick, gameTick);
+      setGameLoop();
       window.addEventListener('keydown', handleKeyDown); // Add keydown event listener
     }
 
@@ -51,6 +52,8 @@ export const TetrisGame = () => {
     if (gameRunning) {
       fallBlockSoft(); // Move block and check collision
       scanBoard(); // Check for completed lines
+      subblocksReallign();
+      logBoard();
       updateCanvas(); 
     }
   };
@@ -60,9 +63,9 @@ export const TetrisGame = () => {
 
     // Just does a sanity check that the block actualy got a chance to move before it is game over
     const currentTime = Date.now();
-    const blockHasExceededTime = currentTime - blockLiveTimeRef.current > gameTick / 2;
+    const blockHasExceededTime = currentTime - blockLiveTimeRef.current > gameTickRef.current / 2;
 
-    let movedBlock = currentBlockRef.current.move(board, 0, 1);
+    let movedBlock = currentBlockRef.current.move(boardRef.current, 0, 1);
       if (!movedBlock) {
         if (
           currentBlockRef.current.originX === startingX && 
@@ -77,26 +80,27 @@ export const TetrisGame = () => {
         currentBlockRef.current = getRandNewBlock();
         setCurrentBlock(currentBlockRef.current); // Update React state for rendering purposes only
         blockLiveTimeRef.current = Date.now();
+        speedUpGame();
       }
     return true;
   }
 
   const fallBlockHard = () => {
-    while (currentBlockRef.current.move(board, 0, 1)) {}
+    while (currentBlockRef.current.move(boardRef.current, 0, 1)) {}
     onGameTick();
   }
 
   const scanBoard = async () => {
     let deletedRow = false;
 
-    for (let row = 0; row < board.length; row++) {
+    for (let row = 0; row < boardRef.current.length; row++) {
       let count = 0;
-      for (let col = 0; col < board[row].length; col++) {
-        if (board[row][col] !== 0) {
+      for (let col = 0; col < boardRef.current[row].length; col++) {
+        if (boardRef.current[row][col] !== 0) {
           count++;
         }
       }
-      if (count === board[row].length) {
+      if (count === boardRef.current[row].length) {
         await clearRow(row);
         deletedRow = true;
       }
@@ -109,33 +113,45 @@ export const TetrisGame = () => {
 
   const clearRow = async (rowIndex) => {
     // Step 1: Clear the row at rowIndex
-    for (let col = 0; col < board[rowIndex].length; col++) {
-      board[rowIndex][col] = 0;
+    for (let col = 0; col < boardRef.current[rowIndex].length; col++) {
+      boardRef.current[rowIndex][col] = 0;
       updateCanvas();
-      await delay(animationSpeed); // This is for the cool disepering blocks animation
+      await delay(animationSpeedRef.current); // This is for the cool disepering blocks animation
     }
 
     // Step 2: Move every row down one row
     for (let row = rowIndex; row > 0; row--) {
-      board[row] = board[row - 1];
+      boardRef.current[row] = [...boardRef.current[row - 1]]; // Create a new array for the current row
     }
 
     // Step 3: Zero the top row of the board.
-    for (let col = 0; col < board[0].length; col++) {
-      board[0][col] = 0;
+    for (let col = 0; col < boardRef.current[0].length; col++) {
+      boardRef.current[0][col] = 0;
     }
 
   }
 
+  
+
   // Goes through and makes sure the subblock's internal 
   // corridinates match where it is on the board grid
   const niceBoardUpdate = async () => {
-    for (let row = board.length - 1; row >= 0; row--) {
-      for (let block = 0; block < board[row].length; block++) {
-        if (board[row][block] !== 0) {
-          board[row][block].moveExact(block, row);
+    for (let row = boardRef.current.length - 1; row >= 0; row--) {
+      for (let block = 0; block < boardRef.current[row].length; block++) {
+        if (boardRef.current[row][block] !== 0) {
+          boardRef.current[row][block].moveExact(block, row);
           updateCanvas();
-          await delay(animationSpeed);
+          await delay(animationSpeedRef.current);
+        }
+      }
+    }
+  }
+
+  const subblocksReallign = () => {
+    for (let row = boardRef.current.length - 1; row >= 0; row--) {
+      for (let block = 0; block < boardRef.current[row].length; block++) {
+        if (boardRef.current[row][block] !== 0) {
+          boardRef.current[row][block].moveExact(block, row);
         }
       }
     }
@@ -155,10 +171,10 @@ export const TetrisGame = () => {
 
   const drawBoard = () => {
     const ctx = contextRef.current; // Access ctx from ref
-    for (let i = 0; i < board.length; i++) {
-      for (let j = 0; j < board[i].length; j++) {
-        if (board[i][j] !== 0) {
-            board[i][j].draw(ctx);
+    for (let i = 0; i < boardRef.current.length; i++) {
+      for (let j = 0; j < boardRef.current[i].length; j++) {
+        if (boardRef.current[i][j] !== 0) {
+          boardRef.current[i][j].draw(ctx);
         }
       }
     }
@@ -191,6 +207,20 @@ export const TetrisGame = () => {
 
 
 
+  const speedUpGame = () => {
+    gameTickRef.current = gameTickRef.current * 0.98;
+    animationSpeedRef.current = gameTickRef.current / 50;
+    clearInterval(gameIntervalRef.current);
+    setGameLoop();
+  }
+  
+  const setGameLoop = () => {
+    gameIntervalRef.current = setInterval(onGameTick, gameTickRef.current);
+  }
+
+  const logBoard = () => {
+    console.log(boardRef.current);
+  }
 
 
   
@@ -210,18 +240,18 @@ export const TetrisGame = () => {
     switch (event.key) {
       case 'ArrowLeft':
         console.log('Move left');
-        currentBlockRef.current.move(board, -1, 0); // Move left
+        currentBlockRef.current.move(boardRef.current, -1, 0); // Move left
         break;
       case 'ArrowRight':
         console.log('Move right');
-        currentBlockRef.current.move(board, 1, 0); // Move right
+        currentBlockRef.current.move(boardRef.current, 1, 0); // Move right
         break;
       case 'ArrowUp':
-        currentBlockRef.current.rotateClockwise(board);
+        currentBlockRef.current.rotateClockwise(boardRef.current);
         break;
       case 'ArrowDown':
         console.log('Move down');
-        currentBlockRef.current.move(board, 0, 1); // Move down faster
+        currentBlockRef.current.move(boardRef.current, 0, 1); // Move down faster
         break;
       case ' ':
         event.preventDefault();  // Prevent default space behavior
