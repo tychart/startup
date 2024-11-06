@@ -52,7 +52,7 @@ export const TetrisGame = () => {
     if (gameRunning) {
       fallBlockSoft(); // Move block and check collision
       scanBoard(); // Check for completed lines
-      subblocksReallign();
+      // subblocksReallign();
       logBoard();
       updateCanvas(); 
     }
@@ -61,11 +61,10 @@ export const TetrisGame = () => {
   // Handle logic for if a collision happens and if game is over
   const fallBlockSoft = () => {
 
-
-
-    // Just does a sanity check that the block actualy got a chance to move before it is game over
+    // Calculates the time for the tetris move reset lock delay 
+    // (slide on the floor without freezing)
     const currentTime = Date.now();
-    const canLock = currentTime - lockDelayRef.current > gameTickRef.current / 2;
+    const canLock = currentTime - lockDelayRef.current > gameTickRef.current;
 
     let movedBlock = currentBlockRef.current.move(boardRef.current, 0, 1, canLock);
       if (!movedBlock) {
@@ -87,6 +86,10 @@ export const TetrisGame = () => {
 
   const fallBlockHard = () => {
     while (currentBlockRef.current.move(boardRef.current, 0, 1, true)) {}
+
+    // Hardcode the time so that the freeze will not happen after fallblockhard is called
+    lockDelayRef.current = Date.now() - 10000; 
+
     onGameTick();
   }
 
@@ -251,6 +254,9 @@ export const TetrisGame = () => {
     }
   };
 
+  const resetLockDelay = async () => {
+    lockDelayRef.current = Date.now();
+  }
 
   const handleKeyDown = (event) => {
     if (!gameRunning) return; // Don't respond if the game isn't running
@@ -259,13 +265,16 @@ export const TetrisGame = () => {
       case 'ArrowLeft':
         console.log('Move left');
         currentBlockRef.current.move(boardRef.current, -1, 0); // Move left
+        resetLockDelay();
         break;
       case 'ArrowRight':
         console.log('Move right');
         currentBlockRef.current.move(boardRef.current, 1, 0); // Move right
+        resetLockDelay();
         break;
       case 'ArrowUp':
         currentBlockRef.current.rotateClockwise(boardRef.current);
+        resetLockDelay();
         break;
       case 'ArrowDown':
         console.log('Move down');
@@ -278,7 +287,6 @@ export const TetrisGame = () => {
       default:
         break;
     }
-    lockDelayRef.current = Date.now();
     updateCanvas();
   };
 
