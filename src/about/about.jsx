@@ -6,18 +6,11 @@ export function About(props) {
   const [quote, setQuote] = React.useState('Loading...');
   const [quoteAuthor, setQuoteAuthor] = React.useState('unknown');
 
-  // We only want this to render the first time the component is created and so we provide an empty dependency list.
-  React.useEffect(() => {
-    setImageUrl(`placeholder.jpg`);
-    setQuote('Show me the code');
-    setQuoteAuthor('Linus Torvalds');
-  }, []);
-
   return (
     <main className='container-fluid bg-secondary text-center'>
       <div id="container-box">
         <div id='picture' className='picture-box'>
-          <img src="/assets/favicon.png" alt='random image' />
+          <img src="/assets/favicon.png" alt='Tetris Dual Logo' />
         </div>
 
         <p>Tetris Dual is a spin on the classic game of Tetris in which you face off head to head on who can last the longest. </p>
