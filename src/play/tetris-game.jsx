@@ -7,6 +7,8 @@ import { Hero } from './classes/hero.js';
 import { Teewee } from './classes/teewee.js';
 import { Smashboy } from './classes/smashboy.js';
 
+import './tetris-game.css';
+
 export const TetrisGame = () => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
@@ -24,8 +26,9 @@ export const TetrisGame = () => {
   const boardRef = useRef(Array.from({ length: 20 }, () => Array(10).fill(0)));
 
   const [currentBlock, setCurrentBlock] = useState(currentBlockRef.current);
-  // const [board, setBoard] = useState(Array.from({ length: 20 }, () => Array(10).fill(0))); // Initialize board state
   const [gameRunning, setGameRunning] = useState(false); // New state to track if the game is running
+  const [showGameOver, setShowGameOver] = useState(false);
+
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -225,9 +228,21 @@ export const TetrisGame = () => {
     gameIntervalRef.current = setInterval(onGameTick, gameTickRef.current);
   }
 
+  const gameOver = () => {
+    setShowGameOver(true); // Show the Game Over popup
+  };
 
 
-
+  // The `GameOverPopup` component
+  const GameOverPopup = () => (
+    <div className="game-over-overlay">
+      <div className="game-over-content">
+        <h1>Game Over</h1>
+        <p>Thanks for playing!</p>
+        <button onClick={() => window.location.reload()}>Play Again</button>
+      </div>
+    </div>
+  );
   
 
   const startGame = () => {
@@ -275,14 +290,15 @@ export const TetrisGame = () => {
   };
 
   return (
-    <div>
+    <div className="game-container">
       <canvas
         ref={canvasRef}
         width={boardWidth}
         height={boardHeight}
         style={{ backgroundColor: 'grey', border: '5px solid red' }}
       />
-      <button onClick={startGame}>Start Game</button> {/* Placeholder for game start */}
+      <button onClick={startGame}>Start Game</button>
+      {showGameOver && <GameOverPopup />}
     </div>
   );
 };
