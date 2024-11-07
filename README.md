@@ -42,3 +42,17 @@ My app will let 2 people play the classic game of Tetris but this version you ge
     * The background image is a gif that will animate and stretch to fit the screen.
     * The blocks are all styled using flexbox
 * I also added some example data to the leaderboard page, but it is not being pulled from the database
+
+## Deliverable: React
+
+* I made a structure very simular to the example simon code that was given in class.
+    * My main login page
+    * My main game page
+    * My Leaderboard Page
+    * My about page
+* My game page compleately is usable for playing a full single player game of Tetris
+    * I coded up tetris from scratch in Javascript, then ported it over to use in react
+    * The react version on my game uses React hooks to update certian states
+* My github link is easily found on the nav bar
+* I have 4 pages all being routed by a React router
+* Everything is compiled using Vite
