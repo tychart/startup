@@ -1,5 +1,13 @@
+#container-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centers horizontally */
+  align-items: center; /* Centers vertically */
+  height: 100vh; /* Takes full viewport height for vertical centering */
+}
+
 .picture-box {
-  height: calc(100px + 1em);
+  height: calc(200px + 1em);
   margin-bottom: 1em;
   padding: 0.5em;
   background: rgb(86, 89, 93);
