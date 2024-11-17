@@ -14,19 +14,6 @@ if [[ -z "$host" || -z "$service" ]]; then
     exit 1
 fi
 
-#printf "\n----> Deploying files for $service to $hostname with $key\n"
-
-# Step 1
-#printf "\n----> Clear out the previous distribution on the target.\n"
-#ssh $host << ENDSSH
-#rm -rf services/${service}/public
-#mkdir -p services/${service}/public
-#ENDSSH
-
-# Step 2
-#printf "\n----> Copy the distribution package to the target.\n"
-#scp -r * $host:services/$service/public
-
 #---------------------------------------------------------------------------------------------------------
 printf "\n----> Deploying React bundle $service to $hostname with $key\n"
 
@@ -36,7 +23,7 @@ rm -rf build
 mkdir build
 npm install # make sure vite is installed so that we can bundle
 npm run build # build the React front end
-cp -rf dist/* build # move the React front end to the target distribution
+cp -rf dist build/public # move the React front end to the target distribution
 cp service/*.js build # move the back end service to the target distribution
 cp service/*.json build
 
