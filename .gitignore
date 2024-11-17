@@ -1,4 +1,4 @@
 /node_modules/
 
-/service/dbConfig.js
+/service/dbConfig.json
 /service/node_modules
