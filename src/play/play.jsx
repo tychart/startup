@@ -3,11 +3,13 @@ import { TetrisGame } from './tetris-game';
 
 export function Play(props) {
   const [backgroundUrl, setBackgroundUrl] = useState('');
+  console.log('Component is rendering');
 
   useEffect(() => {
     const fetchBackground = async () => {
       try {
-        const response = await fetch('/background');
+        console.log('Making fetch request to /background');
+        const response = await fetch('https://picsum.photos/300/?blur');
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -17,10 +19,12 @@ export function Play(props) {
         } else {
           console.error('No wallpapers found!');
           setBackgroundUrl('/TetrisBackgroud1.svg');
+          setBackgroundUrl('https://picsum.photos/300/?blur');
         }
       } catch (error) {
         console.error('Error fetching background image:', error);
         setBackgroundUrl('/TetrisBackgroud1.svg');
+        setBackgroundUrl('https://picsum.photos/300/?blur');
       }
     };
   

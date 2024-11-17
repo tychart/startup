@@ -21,6 +21,8 @@ app.use(express.static('public'));
 // Trust headers that are forwarded from the proxy so we can determine IP addresses
 app.set('trust proxy', true);
 
+console.log("Test");
+
 // Router for service endpoints
 const apiRouter = express.Router();
 app.use(`/api`, apiRouter);
@@ -43,6 +45,7 @@ apiRouter.post('/auth/create', async (req, res) => {
 
 // GetAuth token for the provided credentials
 apiRouter.post('/auth/login', async (req, res) => {
+  console.log("Got in here!!!!!!!!")
   const user = await DB.getUser(req.body.userName);
   if (user) {
     if (await bcrypt.compare(req.body.password, user.password)) {
@@ -62,7 +65,7 @@ apiRouter.delete('/auth/logout', (_req, res) => {
 
 
 // Pass through background to avoid cors
-app.get('/background', async (req, res) => {
+apiRouter.get('/background', async (req, res) => {
 
   console.log('Backend route /background called'); // Confirm route is hit
 
@@ -115,6 +118,7 @@ app.use(function (err, req, res, next) {
 
 // Return the application's default page if the path is unknown
 app.use((_req, res) => {
+  console.log("HIT HERE FOR SOME REASON!")
   res.sendFile('index.html', { root: 'public' });
 });
 
