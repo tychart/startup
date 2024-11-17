@@ -18,7 +18,7 @@ main {
   justify-content: space-around;
   background-color: #1f1f1f;
   color: white;
-  background-image: url('/assets/TetrisBackgroud1.svg');
+  background-image: url('/public/TetrisBackgroud1.svg');
   background-size: cover;
   background-attachment: fixed;
 }
