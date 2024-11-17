@@ -9,7 +9,8 @@ import { Smashboy } from './classes/smashboy.js';
 
 import './tetris-game.css';
 
-export const TetrisGame = () => {
+export const TetrisGame = (props) => {
+  const userName = props.userName;
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const boardWidth = 300; // Width of the game board
@@ -229,8 +230,23 @@ export const TetrisGame = () => {
   }
 
   const gameOver = () => {
+    saveScore(Math.round(gameTickRef.current * 100) / 100);
     setShowGameOver(true); // Show the Game Over popup
   };
+
+  async function saveScore(score) {
+    const date = new Date().toLocaleDateString();
+    const newScore = { name: userName, score: score, date: date };
+
+    await fetch('/api/score', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(newScore),
+    });
+
+    // Let other players know the game has concluded
+    GameNotifier.broadcastEvent(userName, GameEvent.End, newScore);
+  }
 
 
   // The `GameOverPopup` component
@@ -238,6 +254,7 @@ export const TetrisGame = () => {
     <div className="game-over-overlay">
       <div className="game-over-content">
         <h1>Game Over</h1>
+        <p>Score: {Math.round(gameTickRef.current * 100) / 100}</p>
         <p>Thanks for playing!</p>
         <button onClick={() => window.location.reload()}>Play Again</button>
       </div>
