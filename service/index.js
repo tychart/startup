@@ -60,6 +60,26 @@ apiRouter.delete('/auth/logout', (_req, res) => {
   res.status(204).end();
 });
 
+
+// Pass through background to avoid cors
+app.get('/background', async (req, res) => {
+
+  console.log('Backend route /background called'); // Confirm route is hit
+
+  try {
+    const response = await fetch(
+      'https://wallhaven.cc/api/v1/search?&sorting=random&purity=100&categories=111&colors=000000'
+    );
+    const text = await response.text(); // Fetch as plain text first
+    console.log('Raw response from Wallhaven:', text); // Log response to debug
+    const data = JSON.parse(text); // Try parsing it
+    res.json(data); // Send parsed JSON to the frontend
+  } catch (error) {
+    console.error('Error in backend:', error.message);
+    res.status(500).json({ error: 'Failed to fetch data from Wallhaven' });
+  }
+});
+
 // secureApiRouter verifies credentials for endpoints
 const secureApiRouter = express.Router();
 apiRouter.use(secureApiRouter);

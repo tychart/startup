@@ -56,3 +56,11 @@ My app will let 2 people play the classic game of Tetris but this version you ge
 * My github link is easily found on the nav bar
 * I have 4 pages all being routed by a React router
 * Everything is compiled using Vite
+
+## Deliverable: Service
+
+* I am using express in my index.js file to serve my static files as well as my http backend end points
+
+* I am using a walpaper api to set the wallpaper dynamicly (WIP)
+* My frontend calls those endpoints
+* I am also using mongo db to store all the data for users and scores
