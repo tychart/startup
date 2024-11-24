@@ -64,3 +64,13 @@ My app will let 2 people play the classic game of Tetris but this version you ge
 * I am using a walpaper api to set the wallpaper dynamicly (WIP)
 * My frontend calls those endpoints
 * I am also using mongo db to store all the data for users and scores
+
+## Deliverable: Login
+
+
+* I am using bcrypt to hash passwords before storing them inside of mongo db.
+* My program supports new user regrestration and authentication, as well as supporting existing users as well.
+* I am using Mongo DB running in a docker contianer as my service's database for storing and retreving credentials as well as leaderboard scores.
+* I am also using json web tokens to keep track of the user's session.
+* I am using react router to route to different pages based on the user's session status whether loged in or loged out. 
+    * If not loged in, then the user is not able to access the play page
