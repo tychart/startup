@@ -3,8 +3,20 @@ const bcrypt = require('bcrypt');
 const express = require('express');
 const app = express();
 const DB = require('./database.js');
+const { peerProxy } = require('./websocketHandler.js'); // Import the peerProxy function
+const GameManager = require('./games.js'); // Import the GameManager
+
+
 
 const authCookieName = 'token';
+
+
+// Middleware to log every request
+app.use((req, res, next) => {
+  console.log("my middleware");
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} - ${req.ip}`);
+  next();
+});
 
 // The service port may be set on the command line
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
@@ -27,6 +39,13 @@ console.log("Test");
 const apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 
+// // Middleware to log every request
+// apiRouter.use((req, res, next) => {
+//   console.log("my middleware");
+//   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} - ${req.ip}`);
+//   next();
+// });
+
 // CreateAuth token for a new user
 apiRouter.post('/auth/create', async (req, res) => {
   if (await DB.getUser(req.body.userName)) {
@@ -46,11 +65,13 @@ apiRouter.post('/auth/create', async (req, res) => {
 // GetAuth token for the provided credentials
 apiRouter.post('/auth/login', async (req, res) => {
   console.log("Got in here!!!!!!!!")
+  // console.log("With these creds: ", req);
   const user = await DB.getUser(req.body.userName);
   if (user) {
     if (await bcrypt.compare(req.body.password, user.password)) {
       setAuthCookie(res, user.token);
       res.send({ id: user._id });
+      console.log("allowed");
       return;
     }
   }
@@ -111,6 +132,64 @@ secureApiRouter.post('/score', async (req, res) => {
   res.send(scores);
 });
 
+// // CreateGame
+// secureApiRouter.post('/games', async (req, res) => {
+//   const score = { ...req.body, ip: req.ip };
+
+//   console.log("Got here!!!!!!!!!!!!!!!!!!")
+
+
+
+//   await DB.addScore(score);
+//   const scores = await DB.getHighScores();
+//   res.send(scores);
+// });
+
+// Create a new game
+secureApiRouter.post('/games', async (req, res) => {
+  const { name } = req.body;
+  console.log("Got here!!!!!!!!!!!!!!!!!!")
+  console.log("Have this name: ", name)
+  const game = GameManager.createGame(name);
+  console.log(GameManager.getAllGames())
+  res.status(201).json(game);
+});
+
+// Get all games
+secureApiRouter.get('/games', async (req, res) => {
+  const games = GameManager.getAllGames();
+  res.json(games);
+});
+
+// Add a player to a game
+secureApiRouter.post('/games/:id/join', async (req, res) => {
+  const { id } = req.params;
+  const { userName } = req.body;
+  console.log(id, req.body, userName);
+  const success = GameManager.addPlayerToGame(parseInt(id, 10), userName);
+  console.log(GameManager.getAllGames());
+  if (success) {
+    res.status(200).send({ msg: 'Player added' });
+  } else {
+    res.status(400).send({ msg: 'Game is full or does not exist' });
+  }
+});
+
+// Remove a player from a game
+secureApiRouter.post('/games/:id/leave', async (req, res) => {
+  const { id } = req.params;
+  const { player } = req.body;
+  GameManager.removePlayerFromGame(parseInt(id, 10), player);
+  res.status(200).send({ msg: 'Player removed' });
+});
+
+// Delete a game
+secureApiRouter.delete('/games/:id', async (req, res) => {
+  const { id } = req.params;
+  GameManager.deleteGame(parseInt(id, 10));
+  res.status(204).end();
+});
+
 // Default error handler
 app.use(function (err, req, res, next) {
   res.status(500).send({ type: err.name, message: err.message });
@@ -134,3 +213,6 @@ function setAuthCookie(res, authToken) {
 const httpService = app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
+
+// Initialize the WebSocket server
+peerProxy(httpService);

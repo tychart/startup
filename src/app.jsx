@@ -1,13 +1,17 @@
 import React from 'react';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { Login } from './login/login';
+import { GameSelect } from './play/gameSelect.jsx'
 import { Play } from './play/play';
+// import { WebsocketManager } from './play/websocketManager.js';
 import { Leaderboard } from './leaderboard/leaderboard';
 import { About } from './about/about';
 import { AuthState } from './login/authState';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './app.css';
+
+// const wsManager = new WebsocketManager();
 
 function App() {
   const [userName, setUserName] = React.useState(localStorage.getItem('userName') || '');
@@ -72,7 +76,8 @@ function App() {
             }
             exact
           />
-          <Route path='/play' element={<Play userName={userName} />} />
+          <Route path='/play' element={<GameSelect userName={userName}/>} />
+          <Route path="/play/:gameId" element={<Play />} />
           <Route path='/leaderboard' element={<Leaderboard />} />
           <Route path='/about' element={<About />} />
           <Route path='*' element={<NotFound />} />

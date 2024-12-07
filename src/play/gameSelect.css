@@ -1,0 +1,30 @@
+/* .game-select {
+  background-color: #343a40; /* Dark grey background 
+  padding: 20px;
+  border-radius: 5px;
+} */
+
+.game-list {
+  background-color: #2c2f33; /* Darker grey background */
+  padding: 0;
+  border-radius: 5px;
+}
+
+.game-item {
+  background-color: #3a3f44; /* Slightly lighter grey */
+  border: 1px solid #4a4e52; /* Outline with even lighter grey */
+  color: #d1d5db; /* Light grey text */
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+.btn-selected {
+  background-color: #1f2327; /* Dark grey background */
+  color: #d1d5db; /* Light grey text */
+}
+
+.btn-outline-light {
+  background-color: #3a3f44; /* Slightly lighter grey background */
+  color: #d1d5db; /* Light grey text */
+  border-color: #4a4e52; /* Border color */
+}

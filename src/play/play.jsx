@@ -1,35 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { TetrisGame } from './tetris-game';
+import { WebSocketManager } from './webSocketManager';
 
-export function Play(props) {
+export function Play({ gameId, userName }) {
   const [backgroundUrl, setBackgroundUrl] = useState('');
-  console.log('Component is rendering');
+  const [remoteState, setRemoteState] = useState(null);
+  const [webSocketManager, setWebSocketManager] = useState(null);
 
   useEffect(() => {
-    const fetchBackground = async () => {
-      try {
-        console.log('Making fetch request to /background');
-        const response = await fetch('https://picsum.photos/300/?blur');
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        if (data.data && data.data.length > 0) {
-          setBackgroundUrl(data.data[0].path);
-        } else {
-          console.error('No wallpapers found!');
-          setBackgroundUrl('/TetrisBackgroud1.svg');
-          setBackgroundUrl('https://picsum.photos/300/?blur');
-        }
-      } catch (error) {
-        console.error('Error fetching background image:', error);
-        setBackgroundUrl('/TetrisBackgroud1.svg');
-        setBackgroundUrl('https://picsum.photos/300/?blur');
+    // Create a new instance of WebSocketManager and open the connection
+    const wsManager = new WebSocketManager(gameId, userName);
+    wsManager.connect();
+
+    // Set the WebSocketManager instance to state
+    setWebSocketManager(wsManager);
+
+    // Handle incoming game updates
+    const handleEvent = (event) => {
+      if (event.type === 'gameUpdate') {
+        setRemoteState(event.value.state);
       }
     };
-  
-    fetchBackground();
-  }, []); // Runs once when the component mounts
+
+    wsManager.addHandler(handleEvent);
+
+    return () => {
+      // Clean up the WebSocket connection when the component unmounts
+      wsManager.removeHandler(handleEvent);
+      wsManager.disconnect();
+    };
+  }, [gameId, userName]);
+
+  const sendGameUpdate = (localState) => {
+    if (webSocketManager) {
+      webSocketManager.sendGameUpdate(localState);
+    }
+  };
 
   return (
     <main
@@ -39,10 +45,23 @@ export function Play(props) {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        minHeight: '100vh', // Ensure it covers the full viewport height
+        minHeight: '100vh',
       }}
     >
-      <TetrisGame userName={props.userName} />
+      <div className="game-container">
+        <div className="local-game">
+          <h2>Your Game</h2>
+          <TetrisGame userName={userName} onStateChange={sendGameUpdate} />
+        </div>
+        <div className="remote-game">
+          <h2>Opponent's Game</h2>
+          {remoteState ? (
+            <TetrisGame userName="Opponent" initialState={remoteState} readOnly />
+          ) : (
+            <p>Waiting for opponent...</p>
+          )}
+        </div>
+      </div>
     </main>
   );
 }
