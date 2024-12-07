@@ -3,7 +3,6 @@ export class WebSocketManager {
       this.events = [];
       this.handlers = [];
       this.socket = null;
-      this.initWebSocket();
     }
   
     // Initialize WebSocket connection

@@ -3,8 +3,8 @@ const bcrypt = require('bcrypt');
 const express = require('express');
 const app = express();
 const DB = require('./database.js');
-const { peerProxy } = require('./websocketHandler.js'); // Import the peerProxy function
-const GameManager = require('./games.js'); // Import the GameManager
+const { webSocketHandler } = require('./websocketHandler.js'); // Import the peerProxy function
+const gameManager = require('./gameManager.js'); // Import the gameManager
 
 
 
@@ -150,14 +150,14 @@ secureApiRouter.post('/games', async (req, res) => {
   const { name } = req.body;
   console.log("Got here!!!!!!!!!!!!!!!!!!")
   console.log("Have this name: ", name)
-  const game = GameManager.createGame(name);
-  console.log(GameManager.getAllGames())
+  const game = gameManager.createGame(name);
+  console.log(gameManager.getAllGames())
   res.status(201).json(game);
 });
 
 // Get all games
 secureApiRouter.get('/games', async (req, res) => {
-  const games = GameManager.getAllGames();
+  const games = gameManager.getAllGames();
   res.json(games);
 });
 
@@ -166,8 +166,8 @@ secureApiRouter.post('/games/:id/join', async (req, res) => {
   const { id } = req.params;
   const { userName } = req.body;
   console.log(id, req.body, userName);
-  const success = GameManager.addPlayerToGame(parseInt(id, 10), userName);
-  console.log(GameManager.getAllGames());
+  const success = gameManager.addPlayerToGame(parseInt(id, 10), userName);
+  console.log(gameManager.getAllGames());
   if (success) {
     res.status(200).send({ msg: 'Player added' });
   } else {
@@ -179,14 +179,14 @@ secureApiRouter.post('/games/:id/join', async (req, res) => {
 secureApiRouter.post('/games/:id/leave', async (req, res) => {
   const { id } = req.params;
   const { player } = req.body;
-  GameManager.removePlayerFromGame(parseInt(id, 10), player);
+  gameManager.removePlayerFromGame(parseInt(id, 10), player);
   res.status(200).send({ msg: 'Player removed' });
 });
 
 // Delete a game
 secureApiRouter.delete('/games/:id', async (req, res) => {
   const { id } = req.params;
-  GameManager.deleteGame(parseInt(id, 10));
+  gameManager.deleteGame(parseInt(id, 10));
   res.status(204).end();
 });
 
@@ -215,4 +215,4 @@ const httpService = app.listen(port, () => {
 });
 
 // Initialize the WebSocket server
-peerProxy(httpService);
+webSocketHandler(httpService, gameManager);

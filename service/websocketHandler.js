@@ -1,6 +1,6 @@
 const { WebSocketServer } = require('ws');
 
-function peerProxy(httpServer) {
+function webSocketHandler(httpServer, gameManager) {
   // Create a WebSocket server
   const wss = new WebSocketServer({ noServer: true });
 
@@ -104,4 +104,4 @@ function peerProxy(httpServer) {
   }, 10000);
 }
 
-module.exports = { peerProxy };
+module.exports = { webSocketHandler };
