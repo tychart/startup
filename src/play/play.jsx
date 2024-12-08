@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { TetrisGame } from './tetris-game';
 import { WebSocketManager } from './webSocketManager';
+import { useParams } from 'react-router-dom';
 
-export function Play({ gameId, userName }) {
+export function Play({ userName }) {
+  const { gameId } = useParams();
   const [backgroundUrl, setBackgroundUrl] = useState('');
   const [remoteState, setRemoteState] = useState(null);
   const [webSocketManager, setWebSocketManager] = useState(null);
@@ -11,6 +13,10 @@ export function Play({ gameId, userName }) {
     // Create a new instance of WebSocketManager and open the connection
     const wsManager = new WebSocketManager(gameId, userName);
     wsManager.connect();
+
+
+    console.log("sent join request ", gameId, userName)
+    wsManager.joinGame(gameId, userName);
 
     // Set the WebSocketManager instance to state
     setWebSocketManager(wsManager);
@@ -27,7 +33,7 @@ export function Play({ gameId, userName }) {
     return () => {
       // Clean up the WebSocket connection when the component unmounts
       wsManager.removeHandler(handleEvent);
-      wsManager.disconnect();
+      wsManager.disconnectWebSocket();
     };
   }, [gameId, userName]);
 

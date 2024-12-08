@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, NavLink, Route, Routes, useParams } from 'react-router-dom';
 import { Login } from './login/login';
 import { GameSelect } from './play/gameSelect.jsx'
 import { Play } from './play/play';
@@ -17,6 +17,7 @@ function App() {
   const [userName, setUserName] = React.useState(localStorage.getItem('userName') || '');
   const currentAuthState = userName ? AuthState.Authenticated : AuthState.Unauthenticated;
   const [authState, setAuthState] = React.useState(currentAuthState);
+  const { gameId } = useParams();
 
   return (
     <BrowserRouter>
@@ -76,8 +77,9 @@ function App() {
             }
             exact
           />
+          
           <Route path='/play' element={<GameSelect userName={userName}/>} />
-          <Route path="/play/:gameId" element={<Play />} />
+          <Route path="/play/:gameId" element={<Play userName={userName}/>} />
           <Route path='/leaderboard' element={<Leaderboard />} />
           <Route path='/about' element={<About />} />
           <Route path='*' element={<NotFound />} />

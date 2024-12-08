@@ -28,7 +28,7 @@ class Game {
   }
 
   getPlayer(index) {
-    
+    return this.players[index];
   }
 
   removePlayer(player) {
@@ -77,6 +77,13 @@ class GameManager {
 
   deleteGame(gameId) {
     this.games = this.games.filter(game => game.id !== gameId);
+  }
+
+  toString() {
+    return this.games.map(game => {
+      const players = game.players.map((player, index) => `${index + 1}: ${player.userName}`);
+      return `Game ${game.id} '${game.gameName}' - Players: ${players.join(', ')}`;
+    }).join('\n');
   }
 }
 
