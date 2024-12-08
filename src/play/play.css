@@ -1,0 +1,18 @@
+.game-container {
+    background-color: blue;
+    display: flex;
+    flex-direction: row;
+}
+
+
+
+
+
+
+
+#opponentCanvas {
+    background-color: #fff; /* Set a background color */
+    z-index: 10; /* Bring the canvas to the front */
+    border: 1px solid #000; /* Add a border for visibility */
+  }
+

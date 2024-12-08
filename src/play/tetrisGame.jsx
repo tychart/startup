@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
 import { OrangeRicky } from './classes/orange-ricky.js';
 import { BlueRicky } from './classes/blue-ricky.js';
 import { ClevelandZ } from './classes/cleveland-z.js';
@@ -9,8 +9,12 @@ import { Smashboy } from './classes/smashboy.js';
 
 import './tetris-game.css';
 
-export const TetrisGame = (props) => {
+
+
+export const TetrisGame = forwardRef((props, ref) => {
+
   const userName = props.userName;
+  const webSocketManager = props.webSocketManager;
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const boardWidth = 300; // Width of the game board
@@ -29,6 +33,11 @@ export const TetrisGame = (props) => {
   const [currentBlock, setCurrentBlock] = useState(currentBlockRef.current);
   const [gameRunning, setGameRunning] = useState(false); // New state to track if the game is running
   const [showGameOver, setShowGameOver] = useState(false);
+
+  // Expose methods to the parent component
+  useImperativeHandle(ref, () => ({
+    startGame,
+  }));
 
 
   useEffect(() => {
@@ -55,6 +64,7 @@ export const TetrisGame = (props) => {
       fallBlockSoft(); // Move block and check collision
       scanBoard(); // Check for completed lines
       updateCanvas(); 
+      sendScreen();
     }
   };
 
@@ -245,7 +255,7 @@ export const TetrisGame = (props) => {
     });
 
     // Let other players know the game has concluded
-    GameNotifier.broadcastEvent(userName, GameEvent.End, newScore);
+    webSocketManager.sendGameOver(score);
   }
 
 
@@ -272,6 +282,27 @@ export const TetrisGame = (props) => {
 
   const resetLockDelay = async () => {
     lockDelayRef.current = Date.now();
+  }
+
+
+  const sendScreen = () => {
+    const strArray = new Array(200); // Pre-allocate array for performance
+    // sendString = "";
+    let index = 0;
+    for (let i = 0; i < boardRef.current.length; i++) {
+      for (let j = 0; j < boardRef.current[i].length; j++) {
+        if (boardRef.current[i][j] == 0) {
+          strArray[index++] = 0;
+        } else {
+          strArray[index++] = boardRef.current[i][j].color[0];
+        }
+      }
+    }
+
+    // Join the array into a string in one operation
+    const sendString = strArray.join('');
+    // console.log(sendString);
+    webSocketManager.sendGameUpdate(sendString);
   }
 
   const handleKeyDown = (event) => {
@@ -314,10 +345,10 @@ export const TetrisGame = (props) => {
         height={boardHeight}
         style={{ backgroundColor: 'grey', border: '5px solid red' }}
       />
-      <button onClick={startGame}>Start Game</button>
+      {/* <button onClick={startGame}>Start Game</button> */}
       {showGameOver && <GameOverPopup />}
     </div>
   );
-};
+});
 
 export default TetrisGame;

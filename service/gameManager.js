@@ -35,6 +35,28 @@ class Game {
     return this.players[index];
   }
 
+  getPlayerByUsername(userName) {
+    const index = this.players.findIndex(player => player.userName === userName);
+
+    if (index >= 0 && index < this.players.length) {
+      return this.players[index];
+    } else {
+      throw new Error(`Player with username '${userName}' not found.`);
+    }
+  }
+
+  getOpponentByPlayerUsername(userName) {
+    const index = this.players.findIndex(player => player.userName === userName);
+  
+    if (index >= 0 && index < this.players.length) {
+      // Since there are exactly 2 players, the opponent is the other player
+      const opponentIndex = (index === 0) ? 1 : 0;
+      return this.players[opponentIndex];
+    } else {
+      throw new Error(`Player with username '${userName}' not found.`);
+    }
+  }
+
   removePlayer(playerIndex) {
     if (playerIndex >= 0 && playerIndex < this.players.length) {
       
@@ -51,7 +73,7 @@ class Game {
       this.players.splice(index, 1);
     } else {
       console.log(`Player with username '${userName}' not found.`)
-      throw new Error(`Player with username '${userName}' not found.`);
+      // throw new Error(`Player with username '${userName}' not found.`);
     }
     // console.log("Final: ", this.players)
   }

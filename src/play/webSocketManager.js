@@ -82,6 +82,15 @@ export class WebSocketManager {
     this.sendMessage('gameUpdate', { state: boardState });
   }
 
+  // Send Game Over update
+  sendGameOver(score) {
+    this.sendMessage('gameOver', { 
+      gameId: this.currentGameId,
+      userName: this.currentUserName,
+      finalScore: score 
+    });
+  }
+
   // Disconnect the WebSocket connection
   disconnectWebSocket() {
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {

@@ -14,6 +14,7 @@ function webSocketHandler(httpServer, gameManager) {
     console.log("New WebSocket connection established!");
 
     let currentPlayer = null;
+    let opponentPlayer = null;
     let currentGame = null;
 
     ws.on('message', (message) => {
@@ -23,7 +24,7 @@ function webSocketHandler(httpServer, gameManager) {
 
         switch (data.type) {
           case 'join': {
-            console.log("Got to the very top of joinGame")
+            // console.log("Got to the very top of joinGame")
             const { gameId, userName } = data.value;
             const game = gameManager.getGame(gameId);
             if (!game) {
@@ -31,7 +32,7 @@ function webSocketHandler(httpServer, gameManager) {
               return;
             }
 
-            console.log("In joinGame");
+            // console.log("In joinGame");
             // const success = gameManager.addPlayerToGame(gameId, userName);
             // console.log("was adding the new player to the game successful?", success)
             // if (success) {
@@ -39,11 +40,12 @@ function webSocketHandler(httpServer, gameManager) {
               currentGame = game;
               currentPlayer.setWebSocketConnection(ws);
 
-              console.log("Player after setting websocket connection:", currentPlayer)
+              // console.log("Player after setting websocket connection:", currentPlayer)
 
               ws.send(JSON.stringify({ type: 'joined', gameId: game.id, role: `Player ${game.players.length}` }));
-              console.log("Is the game full?", game.isFull())
+              // console.log("Is the game full?", game.isFull())
               if (game.isFull()) {
+                // game.getPlayerByUsername()
                 notifyPlayers(game, { type: 'gameStart', message: 'Both players are connected. Let the game begin!' });
               }
             // } else {
@@ -53,10 +55,20 @@ function webSocketHandler(httpServer, gameManager) {
           }
 
           case 'gameUpdate': {
+            // console.log("Is truely game update!")
             if (currentGame && currentPlayer) {
-              const opponent = currentGame.players.find(p => p !== currentPlayer);
-              if (opponent && opponent.wsConnection && opponent.wsConnection.readyState === ws.OPEN) {
-                opponent.wsConnection.send(JSON.stringify({ type: 'gameUpdate', state: data.state }));
+              console.log(currentPlayer.userName, currentGame)
+              opponentPlayer = currentGame.getOpponentByPlayerUsername(currentPlayer.userName)
+              
+              // console.log("Opponent player:");
+              
+              // console.log(opponentPlayer.userName)
+
+              // console.log("data", data)
+
+              // const opponent = currentGame.players.find(p => p !== currentPlayer);
+              if (opponentPlayer && opponentPlayer.getWebSocketConnection() && opponentPlayer.getWebSocketConnection().readyState == 1) {
+                opponentPlayer.wsConnection.send(JSON.stringify({ type: 'gameUpdate', state: data.value.state }));
               }
             }
             break;
@@ -71,6 +83,12 @@ function webSocketHandler(httpServer, gameManager) {
               }
             }
             break;
+          }
+
+          case 'gameOver': {
+            const { gameId, userName, finalScore } = data.value;
+            console.log("Recieved game over event")
+            console.log(gameId, userName, finalScore)
           }
 
           case 'disconnect': {
@@ -115,7 +133,7 @@ function webSocketHandler(httpServer, gameManager) {
 
   setInterval(() => {
     wss.clients.forEach(ws => {
-      console.log("ws ping")
+      // console.log("ws ping")
       if (ws.readyState === ws.OPEN) {
         ws.ping();
       }
