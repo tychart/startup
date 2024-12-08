@@ -22,7 +22,8 @@ function webSocketHandler(httpServer, gameManager) {
         console.log("Received message: ", data);
 
         switch (data.type) {
-          case 'joinGame': {
+          case 'join': {
+            console.log("Got to the very top of joinGame")
             const { gameId, userName } = data.value;
             const game = gameManager.getGame(gameId);
             if (!game) {
@@ -30,19 +31,24 @@ function webSocketHandler(httpServer, gameManager) {
               return;
             }
 
-            const success = gameManager.addPlayerToGame(gameId, userName);
-            if (success) {
+            console.log("In joinGame");
+            // const success = gameManager.addPlayerToGame(gameId, userName);
+            // console.log("was adding the new player to the game successful?", success)
+            // if (success) {
               currentPlayer = game.getPlayer(game.players.length - 1); // Get newly added player
               currentGame = game;
               currentPlayer.setWebSocketConnection(ws);
 
+              console.log("Player after setting websocket connection:", currentPlayer)
+
               ws.send(JSON.stringify({ type: 'joined', gameId: game.id, role: `Player ${game.players.length}` }));
+              console.log("Is the game full?", game.isFull())
               if (game.isFull()) {
                 notifyPlayers(game, { type: 'gameStart', message: 'Both players are connected. Let the game begin!' });
               }
-            } else {
-              ws.send(JSON.stringify({ type: 'error', message: 'Game is full or does not exist' }));
-            }
+            // } else {
+            //   ws.send(JSON.stringify({ type: 'error', message: 'Game is full or does not exist' }));
+            // }
             break;
           }
 
@@ -70,6 +76,8 @@ function webSocketHandler(httpServer, gameManager) {
           case 'disconnect': {
             const { gameId, userName } = data.value;
             console.log("Disconnecting gameId", gameId, userName);
+            gameManager.removePlayerFromGame(gameId, userName);
+            console.log(gameManager.toString());
           }
 
           default:
@@ -95,9 +103,12 @@ function webSocketHandler(httpServer, gameManager) {
   });
 
   function notifyPlayers(game, message) {
+    // console.log("Trying to notify players", game, message)
     game.players.forEach(player => {
-      if (player.wsConnection && player.wsConnection.readyState === WebSocketServer.OPEN) {
-        player.wsConnection.send(JSON.stringify(message));
+      // console.log("Ready state", player.getWebSocketConnection().readyState)
+      if (player.getWebSocketConnection() && player.getWebSocketConnection().readyState == 1) {
+        // console.log("trying to send to everyone", message)
+        player.getWebSocketConnection().send(JSON.stringify(message));
       }
     });
   }

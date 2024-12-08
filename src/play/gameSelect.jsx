@@ -60,7 +60,7 @@ export function GameSelect(props) {
               onClick={() => setSelectedGameId(game.id)}
               className={`${selectedGameId === game.id ? 'btn-selected' : 'btn-outline-light'}`}
             >
-              Join Game {game.id}: {game.name}
+              Join Game {game.id}: {game.gameName}
             </button>
           </li>
         ))}

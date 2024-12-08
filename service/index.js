@@ -13,7 +13,7 @@ const authCookieName = 'token';
 
 // Middleware to log every request
 app.use((req, res, next) => {
-  console.log("my middleware");
+  // console.log("my middleware");
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} - ${req.ip}`);
   next();
 });
@@ -33,7 +33,7 @@ app.use(express.static('public'));
 // Trust headers that are forwarded from the proxy so we can determine IP addresses
 app.set('trust proxy', true);
 
-console.log("Test");
+// console.log("Test");
 
 // Router for service endpoints
 const apiRouter = express.Router();
@@ -64,14 +64,14 @@ apiRouter.post('/auth/create', async (req, res) => {
 
 // GetAuth token for the provided credentials
 apiRouter.post('/auth/login', async (req, res) => {
-  console.log("Got in here!!!!!!!!")
+  // console.log("Got in here!!!!!!!!")
   // console.log("With these creds: ", req);
   const user = await DB.getUser(req.body.userName);
   if (user) {
     if (await bcrypt.compare(req.body.password, user.password)) {
       setAuthCookie(res, user.token);
       res.send({ id: user._id });
-      console.log("allowed");
+      // console.log("allowed");
       return;
     }
   }
@@ -148,10 +148,10 @@ secureApiRouter.post('/score', async (req, res) => {
 // Create a new game
 secureApiRouter.post('/games', async (req, res) => {
   const { name } = req.body;
-  console.log("Got here!!!!!!!!!!!!!!!!!!")
-  console.log("Have this name: ", name)
+  // console.log("Got here!!!!!!!!!!!!!!!!!!")
+  // console.log("Have this name: ", name)
   const game = gameManager.createGame(name);
-  console.log(gameManager.getAllGames())
+  console.log(gameManager.toString())
   res.status(201).json(game);
 });
 
@@ -165,12 +165,13 @@ secureApiRouter.get('/games', async (req, res) => {
 secureApiRouter.post('/games/:id/join', async (req, res) => {
   const { id } = req.params;
   const { userName } = req.body;
-  console.log(id, req.body, userName);
+  // console.log(id, req.body, userName);
   const success = gameManager.addPlayerToGame(parseInt(id, 10), userName);
-  console.log(gameManager.getAllGames());
+  console.log(gameManager.toString());
   if (success) {
     res.status(200).send({ msg: 'Player added' });
   } else {
+    console.log("Game is full or does not exist")
     res.status(400).send({ msg: 'Game is full or does not exist' });
   }
 });
@@ -197,7 +198,7 @@ app.use(function (err, req, res, next) {
 
 // Return the application's default page if the path is unknown
 app.use((_req, res) => {
-  console.log("HIT HERE FOR SOME REASON!")
+  // console.log("HIT HERE FOR SOME REASON!")
   res.sendFile('index.html', { root: 'public' });
 });
 

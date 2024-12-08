@@ -21,18 +21,26 @@ export function Play({ userName }) {
     // Set the WebSocketManager instance to state
     setWebSocketManager(wsManager);
 
-    // Handle incoming game updates
-    const handleEvent = (event) => {
-      if (event.type === 'gameUpdate') {
-        setRemoteState(event.value.state);
+    // Handle incoming websockets updates
+    const webSocketEventHandler = (event) => {
+      console.log('Received message from server:', event);
+      switch (event.type) {
+        case "gameStart": {
+
+          console.log("received game start!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", event)
+          break;
+        }
       }
     };
 
-    wsManager.addHandler(handleEvent);
+    // Add a handler to log all incoming messages
+    wsManager.addHandler(webSocketEventHandler);
+
+    // wsManager.addHandler(handleEvent);
 
     return () => {
       // Clean up the WebSocket connection when the component unmounts
-      wsManager.removeHandler(handleEvent);
+      wsManager.removeHandler(webSocketEventHandler);
       wsManager.disconnectWebSocket();
     };
   }, [gameId, userName]);

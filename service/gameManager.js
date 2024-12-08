@@ -7,6 +7,10 @@ class Player {
   setWebSocketConnection(connection) {
     this.wsConnection = connection;
   }
+
+  getWebSocketConnection() {
+    return this.wsConnection;
+  }
 }
 
 class Game {
@@ -31,8 +35,25 @@ class Game {
     return this.players[index];
   }
 
-  removePlayer(player) {
-    this.players = this.players.filter(p => p !== player);
+  removePlayer(playerIndex) {
+    if (playerIndex >= 0 && playerIndex < this.players.length) {
+      
+      this.players.splice(playerIndex, 1);
+      
+    } else {
+      throw new Error(`Invalid player index: ${playerIndex}`);
+    }
+  }
+
+  removePlayerByUsername(userName) {
+    const index = this.players.findIndex(player => player.userName === userName);
+    if (index >= 0 && index < this.players.length) {
+      this.players.splice(index, 1);
+    } else {
+      console.log(`Player with username '${userName}' not found.`)
+      throw new Error(`Player with username '${userName}' not found.`);
+    }
+    // console.log("Final: ", this.players)
   }
 
   isFull() {
@@ -53,7 +74,7 @@ class GameManager {
   }
 
   getGame(id) {
-    return this.games.find(game => game.id === id);
+    return this.games.find(game => game.id == id);
   }
 
   getAllGames() {
@@ -68,10 +89,12 @@ class GameManager {
     return false;
   }
 
-  removePlayerFromGame(gameId, player) {
+  removePlayerFromGame(gameId, userName) {
     const game = this.getGame(gameId);
     if (game) {
-      game.removePlayer(player);
+      game.removePlayerByUsername(userName);
+    } else {
+      throw new Error(`Game with id '${gameId}' not found.`);
     }
   }
 
