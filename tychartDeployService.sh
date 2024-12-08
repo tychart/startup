@@ -1,18 +1,20 @@
+#!/bin/bash
+
 while getopts k:h:s: flag
 do
     case "${flag}" in
-        k) key=${OPTARG};;
-        h) hostname=${OPTARG};;
+        h) host=${OPTARG};;
         s) service=${OPTARG};;
     esac
 done
 
-if [[ -z "$key" || -z "$hostname" || -z "$service" ]]; then
+if [[ -z "$host" || -z "$service" ]]; then
     printf "\nMissing required parameter.\n"
-    printf "  syntax: deployService.sh -k <pem key file> -h <hostname> -s <service>\n\n"
+    printf "  syntax: deployFiles.sh -h <host> -s <service>\n\n"
     exit 1
 fi
 
+#---------------------------------------------------------------------------------------------------------
 printf "\n----> Deploying React bundle $service to $hostname with $key\n"
 
 # Step 1
@@ -27,18 +29,18 @@ cp service/*.json build
 
 # Step 2
 printf "\n----> Clearing out previous distribution on the target\n"
-ssh -i "$key" ubuntu@$hostname << ENDSSH
+ssh $host << ENDSSH
 rm -rf services/${service}
 mkdir -p services/${service}
 ENDSSH
 
 # Step 3
 printf "\n----> Copy the distribution package to the target\n"
-scp -r -i "$key" build/* ubuntu@$hostname:services/$service
+scp -r build/* $host:services/$service
 
 # Step 4
 printf "\n----> Deploy the service on the target\n"
-ssh -i "$key" ubuntu@$hostname << ENDSSH
+ssh $host << ENDSSH
 bash -i
 cd services/${service}
 npm install

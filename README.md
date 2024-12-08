@@ -74,3 +74,9 @@ My app will let 2 people play the classic game of Tetris but this version you ge
 * I am also using json web tokens to keep track of the user's session.
 * I am using react router to route to different pages based on the user's session status whether loged in or loged out. 
     * If not loged in, then the user is not able to access the play page
+
+## Deliverable: WebSocket
+
+* I am using a combination of http and websocket to play multiplayer tetris games
+* My program supports joining games and listing multiple games to join
+* It also supports streaming the entire game board to another user using websocket
