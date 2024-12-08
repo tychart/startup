@@ -343,7 +343,7 @@ export const TetrisGame = forwardRef((props, ref) => {
         ref={canvasRef}
         width={boardWidth}
         height={boardHeight}
-        style={{ backgroundColor: 'grey', border: '5px solid red' }}
+        style={{ backgroundColor: 'grey', border: '2px solid black' }}
       />
       {/* <button onClick={startGame}>Start Game</button> */}
       {showGameOver && <GameOverPopup />}

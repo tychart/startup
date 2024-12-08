@@ -150,6 +150,7 @@ export function Play({ userName }) {
           <h2>Your Game</h2>
           <TetrisGame ref={tetrisGameRef} userName={userName} onStateChange={sendGameUpdate} webSocketManager={webSocketManager} />
         </div>
+        <div></div>
         <div className="remote-game">
           <h2>Opponent's Game</h2>
           <canvas id="opponentCanvas" ref={canvasRef} width="300" height="600"></canvas>
