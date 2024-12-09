@@ -287,21 +287,36 @@ export const TetrisGame = forwardRef((props, ref) => {
 
   const sendScreen = () => {
     const strArray = new Array(200); // Pre-allocate array for performance
+    
+    let blockMap = new Map();
+    const rowNum = 20;
+    const colNum = 10;
+    
+
+    for (let subblock of currentBlockRef.current.block) {
+        blockMap.set(subblock.y * colNum + subblock.x, subblock.color)
+    }
+
+
     // sendString = "";
     let index = 0;
     for (let i = 0; i < boardRef.current.length; i++) {
       for (let j = 0; j < boardRef.current[i].length; j++) {
-        if (boardRef.current[i][j] == 0) {
-          strArray[index++] = 0;
+        if (blockMap.get(index)) {
+          strArray[index++] = blockMap.get(i * colNum + j)[0];
         } else {
-          strArray[index++] = boardRef.current[i][j].color[0];
+          if (boardRef.current[i][j] == 0) {
+            strArray[index++] = 0;
+          } else {
+            strArray[index++] = boardRef.current[i][j].color[0];
+          }
         }
       }
     }
 
     // Join the array into a string in one operation
     const sendString = strArray.join('');
-    // console.log(sendString);
+    console.log(sendString);
     webSocketManager.sendGameUpdate(sendString);
   }
 
@@ -320,10 +335,12 @@ export const TetrisGame = forwardRef((props, ref) => {
         resetLockDelay();
         break;
       case 'ArrowUp':
+        event.preventDefault(); // To prevent scrolling
         currentBlockRef.current.rotateClockwise(boardRef.current);
         resetLockDelay();
         break;
       case 'ArrowDown':
+        event.preventDefault(); // To prevent scrolling
         // console.log('Move down');
         currentBlockRef.current.move(boardRef.current, 0, 1); // Move down faster
         break;
